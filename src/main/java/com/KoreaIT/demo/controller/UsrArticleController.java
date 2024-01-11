@@ -20,6 +20,7 @@ public class UsrArticleController {
 		this.articles = new ArrayList<>();
 	}
 	
+	// 액션 메서드
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public Article doWrite(String title, String body) {
@@ -40,5 +41,17 @@ public class UsrArticleController {
 		return articles;
 	}
 	
-	
+	// 서비스 메서드
+	private void makeTestData() {
+		for(int i = 1; i <= 10; i++) {
+			lastArticleId++;
+			
+			String title = "제목" + i;
+			String body = "내용" + i;
+			
+			Article article = new Article(lastArticleId, title, body);
+			
+			articles.add(article);
+		}
+	}
 }
