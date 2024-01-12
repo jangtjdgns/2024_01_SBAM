@@ -25,7 +25,12 @@ public class UsrArticleController {
 	@ResponseBody
 	public Article doWrite(String title, String body) {
 
-		Article article = articleService.writeArticle(title, body);
+		articleService.writeArticle(title, body);
+		
+		// LAST_INSERT_ID(), 마지막 id(pk) 를 가져옴
+		int id = articleService.getLastInsertId();
+		
+		Article article = articleService.getArticleById(id);
 
 		return article;
 	}
