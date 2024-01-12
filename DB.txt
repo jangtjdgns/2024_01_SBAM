@@ -13,59 +13,73 @@ CREATE TABLE article(
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
+memberId = 1,
 title = '제목1',
 `body` = '내용1';
 
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
+memberId = 2,
 title = '제목2',
 `body` = '내용2';
 
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
+memberId = 2,
 title = '제목3',
 `body` = '내용3';
 
 SELECT * FROM article
 ORDER BY id DESC;
 
-// 두 배씩 출력
+# 두 배씩 출력
 INSERT INTO article(regDate, updateDate, title, `body`)
 SELECT NOW(), NOW(), CONCAT('제목_', RAND()), CONCAT('내용_', RAND())
 FROM article;
 
 
-// memberId 칼럼 추가
+# memberId 칼럼 추가
 ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
 
 
 
 
-// ========== member table 추가
+# ========== member table 추가
 CREATE TABLE `member`(
 	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
 	updateDate DATETIME NOT NULL,
-	loginId VARCHAR(100) NOT NULL,
+	loginId VARCHAR(20) NOT NULL UNIQUE,
 	loginPw VARCHAR(100) NOT NULL,
-	`name` VARCHAR(100) NOT NULL
+	authLevel INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '권한 레벨 (일반 = 1, 관리자 = 0 )',
+	`name` VARCHAR(20) NOT NULL,
+	nickname VARCHAR(20) NOT NULL,
+	cellphoneNum VARCHAR(20) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	delStatus INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (탈퇴 전 = 0, 탈퇴 후 = 1)',
+	delDate DATETIME COMMENT '탈퇴 날짜'
 );
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'admin',
+loginPw = 'admin',
+`name` = '관리자',
+nickname = '관리자',
+cellphoneNum = '010-0000-0000',
+email = 'admin@admin.com';
 
 INSERT INTO `member`
 SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'test1',
 loginPw = 'test1',
-`name` = 'test1';
+`name` = '테스트1',
+nickname = '테스트1',
+cellphoneNum = '010-1111-1111',
+email = 'test1@test.com';
 
-INSERT INTO `member`
-SET regDate = NOW(),
-updateDate = NOW(),
-loginId = 'test2',
-loginPw = 'test2',
-`name` = 'test2';
-
-// member 테이블 삭제
-DROP TABLE `member`;
+SELECT * FROM `member`;
