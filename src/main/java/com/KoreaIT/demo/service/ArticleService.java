@@ -16,24 +16,20 @@ public class ArticleService {
 		this.articleDao = articleDao;
 	}
 
-	// 게시물 추가 메서드
 	public Article writeArticle(String title, String body) {
 		return articleDao.writeArticle(title, body);
 	}
 
-	// id로 게시물 가져오는 메서드
 	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
 	}
-
-	// 삭제 메서드
-	public void deleteArticle(Article article) {
-		articleDao.deleteArticle(article);
+	
+	public void deleteArticleById(int id) {
+		articleDao.deleteArticleById(id);
 	}
 
-	// 수정 메서드
-	public void modifyArticle(Article article, String title, String body) {
-		articleDao.modifyArticle(article, title, body);
+	public void modifyArticle(int id, String title, String body) {
+		articleDao.modifyArticle(id, title, body);
 	}
 
 	public List<Article> showList() {

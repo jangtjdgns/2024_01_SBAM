@@ -49,7 +49,7 @@ public class UsrArticleController {
 			return id + "번 게시물은 존재하지 않습니다.";
 		}
 		
-		articleService.deleteArticle(article);
+		articleService.deleteArticleById(id);
 
 		return id + "번 게시물이 삭제되었습니다.";
 	}
@@ -63,9 +63,9 @@ public class UsrArticleController {
 
 		if (article == null) {
 			return id + "번 게시물은 존재하지 않습니다.";
-		}
+		} 
 
-		articleService.modifyArticle(article, title, body);
+		articleService.modifyArticle(id, title, body);
 
 		return id + "번 게시물이 수정되었습니다.";
 	}
