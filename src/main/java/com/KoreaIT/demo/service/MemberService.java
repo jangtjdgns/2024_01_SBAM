@@ -1,7 +1,5 @@
 package com.KoreaIT.demo.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.KoreaIT.demo.dao.MemberDao;
@@ -16,11 +14,6 @@ public class MemberService {
 		this.memberDao = memberDao;
 	}
 
-	public List<Member> getMembers() {
-
-		return memberDao.getMembers();
-	}
-
 	public void joinMember(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 		memberDao.joinMember(loginId, loginPw, name, nickname, cellphoneNum, email);
 	}
@@ -32,4 +25,9 @@ public class MemberService {
 	public Member getMemberById(int id) {
 		return memberDao.getMemberById(id);
 	}
+	
+	public Member getMemberByLoginId(String loginId) {
+		return memberDao.getMemberByLoginId(loginId);
+	}
+
 }

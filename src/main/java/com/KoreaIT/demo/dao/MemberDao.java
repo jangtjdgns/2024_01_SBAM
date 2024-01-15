@@ -1,7 +1,5 @@
 package com.KoreaIT.demo.dao;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -10,9 +8,6 @@ import com.KoreaIT.demo.vo.Member;
 
 @Mapper
 public interface MemberDao {
-
-	@Select("SELECT * FROM `member`")
-	public List<Member> getMembers();
 
 	@Insert("""
 			INSERT INTO `member`
@@ -37,5 +32,11 @@ public interface MemberDao {
 			WHERE id = #{id}
 			""")
 	public Member getMemberById(int id);
+
+	@Select("""
+			SELECT * FROM `member`
+			WHERE loginId = #{loginId}
+			""")
+	public Member getMemberByLoginId(String loginId);
 
 }

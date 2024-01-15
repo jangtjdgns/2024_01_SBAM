@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.demo.service.ArticleService;
+import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Article;
 
 @Controller
 public class UsrArticleController {
 
-	// 의존성 주입
 	private ArticleService articleService;
 	
 	// 스프링이 알아서 추가해줌, @Autowired 어노테이션이 생략됨
@@ -24,10 +24,9 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public Article doWrite(String title, String body) {
-
+		
 		articleService.writeArticle(title, body);
 		
-		// LAST_INSERT_ID(), 마지막 id(pk) 를 가져옴
 		int id = articleService.getLastInsertId();
 		
 		Article article = articleService.getArticleById(id);
