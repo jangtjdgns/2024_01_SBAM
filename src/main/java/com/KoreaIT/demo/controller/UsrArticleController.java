@@ -50,12 +50,12 @@ public class UsrArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 게시물은 존재하지 않습니다.";
+			return Util.f("%d번 게시물은 존재하지 않습니다.", id);
 		}
 		
 		articleService.deleteArticleById(id);
 
-		return id + "번 게시물이 삭제되었습니다.";
+		return Util.f("%d번 게시물이 삭제되었습니다.", id);
 	}
 
 	// modify, 수정
@@ -66,12 +66,12 @@ public class UsrArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 게시물은 존재하지 않습니다.";
+			return Util.f("%d번 게시물은 존재하지 않습니다.", id);
 		} 
 
 		articleService.modifyArticle(id, title, body);
 
-		return id + "번 게시물이 수정되었습니다.";
+		return Util.f("%d번 게시물이 수정되었습니다.", id);
 	}
 
 	// detail, 상세보기
@@ -82,7 +82,7 @@ public class UsrArticleController {
 		Article article = articleService.getArticleById(id);
 		
 		if (article == null) {
-			return id + "번 게시물은 존재하지 않습니다.";
+			return Util.f("%d번 게시물은 존재하지 않습니다.", id);
 		}
 		
 		return article;
