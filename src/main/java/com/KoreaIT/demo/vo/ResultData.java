@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResultData {
+public class ResultData<DT> {
 	private String resultCode;
 	private String msg;
-	private Object data;
+	private DT data;
 	
-	public static ResultData from(String resultCode, String msg) {
+	public static <DT> ResultData<DT> from(String resultCode, String msg) {
 		return from(resultCode, msg, null);
 	}
 	
-	public static ResultData from(String resultCode, String msg, Object data) {
-		return new ResultData(resultCode, msg, data);
+	public static <DT> ResultData<DT> from(String resultCode, String msg, DT data) {
+		return new ResultData<>(resultCode, msg, data);
 	}
 	
 	/* 
