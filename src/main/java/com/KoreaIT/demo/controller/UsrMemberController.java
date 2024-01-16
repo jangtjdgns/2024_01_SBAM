@@ -9,6 +9,8 @@ import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Member;
 import com.KoreaIT.demo.vo.ResultData;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class UsrMemberController {
 
@@ -59,5 +61,56 @@ public class UsrMemberController {
 		member = memberService.getMemberById(id);
 
 		return ResultData.from("S-1", "회원가입 성공", member);
+	}
+
+	@RequestMapping("/usr/member/doLogin")
+	@ResponseBody
+	public ResultData doLogin(HttpSession session, String loginId, String loginPw) {
+		
+		// 로그아웃 시 이용가능
+		if(session.getAttribute("loginedMemberId") != null) {
+			return ResultData.from("F-1", "로그아웃 후 이용가능합니다.");
+		}
+		
+		// null 검증
+		if(Util.empty(loginId)) {
+			return ResultData.from("F-2", "아이디를 입력해주세요.");
+		}
+		
+		if(Util.empty(loginPw)) {
+			return ResultData.from("F-3", "비밀번호를를 입력해주세요.");
+		}
+		
+		// 아이디가 존재하지 않는 경우
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if(member == null) {
+			return ResultData.from("F-4", Util.f("%s 은(는) 존재하지 않는 아이디입니다.", loginId));
+		}
+		
+		//아이디는 존재하지만 비밀번호가 일치하지 않는 경우
+		if(!member.getLoginPw().equals(loginPw)) {
+			return ResultData.from("F-5", "비밀번호를 확인해주세요.");
+		}
+		
+		// 아이디와 비밀번호가 문제가 없을 때
+		session.setAttribute("loginedMemberId", member.getId());
+		
+		return ResultData.from("S-1", Util.f("[%s] 님 환영합니다~", loginId));
+	}
+	
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public ResultData doLogin(HttpSession session) {
+		
+		// 로그인 시 이용가능
+		if(session.getAttribute("loginedMemberId") == null) {
+			return ResultData.from("F-1", "로그인 후 이용가능합니다.");
+		}
+		
+		// 세션 삭제
+		session.removeAttribute("loginedMemberId");
+		
+		return ResultData.from("S-1", "로그아웃 되었습니다.");
 	}
 }
