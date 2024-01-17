@@ -32,8 +32,8 @@ public class ArticleService {
 		articleDao.modifyArticle(id, title, body);
 	}
 
-	public List<Article> showList() {
-		return articleDao.showList();
+	public List<Article> getArticles() {
+		return articleDao.getArticles();
 	}
 
 	public int getLastInsertId() {

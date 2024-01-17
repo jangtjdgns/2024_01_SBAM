@@ -57,7 +57,7 @@ public interface ArticleDao {
 				FROM article
 				ORDER BY id DESC
 			""")
-	public List<Article> showList();
+	public List<Article> getArticles();
 
 	@Select("""
 			SELECT LAST_INSERT_ID();
