@@ -51,7 +51,7 @@ public class UsrMemberController {
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member != null) {
-			return ResultData.from("F-A", Util.f("%s은(는) 이미 사용중인 아이디입니다.", loginId));
+			return ResultData.from("F-D", Util.f("%s은(는) 이미 사용중인 아이디입니다.", loginId));
 		}
 		
 		memberService.joinMember(loginId, loginPw, name, nickname, cellphoneNum, email);

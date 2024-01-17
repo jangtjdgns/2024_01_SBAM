@@ -17,10 +17,11 @@ public interface ArticleDao {
 			INSERT INTO article
 				SET regDate = NOW()
 					, updateDate = NOW()
+					, memberId = #{loginedMemberId}
 					, title = #{title}
 					, `body` = #{body}
 			""")
-	public void writeArticle(String title, String body);
+	public void writeArticle(int loginedMemberId, String title, String body);
 	
 	@Select(""" 
 			SELECT *

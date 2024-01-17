@@ -1,11 +1,12 @@
-DROP DATABASE IF EXISTS JSPAM;
-CREATE DATABASE JSPAM;
-USE JSPAM;
+DROP DATABASE IF EXISTS SB_AM;
+CREATE DATABASE SB_AM;
+USE SB_AM;
 
 CREATE TABLE article(
 	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
 	updateDate DATETIME NOT NULL,
+	memberId INT UNSIGNED NOT NULL,
 	title VARCHAR(100) NOT NULL,
 	`body` TEXT NOT NULL
 );
@@ -38,12 +39,6 @@ ORDER BY id DESC;
 INSERT INTO article(regDate, updateDate, title, `body`)
 SELECT NOW(), NOW(), CONCAT('제목_', RAND()), CONCAT('내용_', RAND())
 FROM article;
-
-
-# memberId 칼럼 추가
-ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
-
-
 
 
 # ========== member table 추가
