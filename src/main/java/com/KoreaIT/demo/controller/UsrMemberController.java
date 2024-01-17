@@ -69,34 +69,34 @@ public class UsrMemberController {
 		
 		// 로그아웃 시 이용가능
 		if(session.getAttribute("loginedMemberId") != null) {
-			return ResultData.from("F-1", "로그아웃 후 이용가능합니다.");
+			return ResultData.from("F-L", "로그아웃 후 이용해주세요.");
 		}
 		
 		// null 검증
 		if(Util.empty(loginId)) {
-			return ResultData.from("F-2", "아이디를 입력해주세요.");
+			return ResultData.from("F-1", "아이디를 입력해주세요.");
 		}
 		
 		if(Util.empty(loginPw)) {
-			return ResultData.from("F-3", "비밀번호를를 입력해주세요.");
+			return ResultData.from("F-2", "비밀번호를 입력해주세요.");
 		}
 		
 		// 아이디가 존재하지 않는 경우
 		Member member = memberService.getMemberByLoginId(loginId);
 		
 		if(member == null) {
-			return ResultData.from("F-4", Util.f("%s 은(는) 존재하지 않는 아이디입니다.", loginId));
+			return ResultData.from("F-3", Util.f("%s 은(는) 존재하지 않는 아이디입니다.", loginId));
 		}
 		
-		//아이디는 존재하지만 비밀번호가 일치하지 않는 경우
+		// 아이디는 존재하지만 비밀번호가 일치하지 않는 경우
 		if(!member.getLoginPw().equals(loginPw)) {
-			return ResultData.from("F-5", "비밀번호를 확인해주세요.");
+			return ResultData.from("F-4", "비밀번호를 확인해주세요.");
 		}
 		
 		// 아이디와 비밀번호가 문제가 없을 때
 		session.setAttribute("loginedMemberId", member.getId());
 		
-		return ResultData.from("S-1", Util.f("[%s] 님 환영합니다~", loginId));
+		return ResultData.from("S-1", Util.f("%s 님 환영합니다~", member.getNickname()));
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
@@ -105,12 +105,12 @@ public class UsrMemberController {
 		
 		// 로그인 시 이용가능
 		if(session.getAttribute("loginedMemberId") == null) {
-			return ResultData.from("F-1", "로그인 후 이용가능합니다.");
+			return ResultData.from("F-L", "로그인 후 이용해주세요.");
 		}
 		
 		// 세션 삭제
 		session.removeAttribute("loginedMemberId");
 		
-		return ResultData.from("S-1", "로그아웃 되었습니다.");
+		return ResultData.from("S-1", "정상적으로 로그아웃 되었습니다.");
 	}
 }
