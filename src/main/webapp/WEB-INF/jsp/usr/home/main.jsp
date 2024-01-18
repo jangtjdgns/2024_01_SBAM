@@ -1,25 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>MAIN</title>
-</head>
-<body>
-	<h1>메인페이지</h1>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+	<c:set var="pageTitle" value="MAIN"/>
+
+<%@ include file="../common/header.jsp" %>
 	
-	<div>
-		<div><a href="/">로고</a></div>
-		
-		<ul>
-			<li><a href="/">HOME</a></li>
-			<li><a href="/usr/article/list">List</a></li>
-		</ul>
-	</div>
-	
-	<div>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt dolores illum alias labore error pariatur laudantium natus fuga mollitia quis quidem ut quae ea magnam recusandae dolorum harum dolore architecto.
-	</div>
-</body>
-</html>
+	<section>
+		<div>	
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt dolores illum alias labore error pariatur laudantium natus fuga mollitia quis quidem ut quae ea magnam recusandae dolorum harum dolore architecto.
+			</div>
+			<div>
+				안녕하세요.
+			</div>
+		</div>
+	</section>
+
+<%@ include file="../common/footer.jsp" %>
