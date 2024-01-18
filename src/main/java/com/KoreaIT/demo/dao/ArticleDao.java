@@ -53,9 +53,11 @@ public interface ArticleDao {
 	public void modifyArticle(int id, String title, String body);
 
 	@Select("""
-			SELECT *
-				FROM article
-				ORDER BY id DESC
+			SELECT A.*, M.nickname AS writerName
+				FROM article as A
+				INNER JOIN `member` AS M
+				ON A.memberId = M.id
+				ORDER BY a.id DESC
 				Limit 0, 15
 			""")
 	public List<Article> getArticles();
@@ -64,4 +66,13 @@ public interface ArticleDao {
 			SELECT LAST_INSERT_ID();
 			""")
 	public int getLastInsertId();
+
+	@Select("""
+			SELECT A.*, M.nickname AS writerName
+				FROM article as A
+				INNER JOIN `member` AS M
+				ON A.memberId = M.id
+				WHERE a.id = #{id}
+			""")
+	public Article forPrintArticle(int id);
 }
