@@ -56,6 +56,7 @@ public interface ArticleDao {
 			SELECT *
 				FROM article
 				ORDER BY id DESC
+				Limit 0, 15
 			""")
 	public List<Article> getArticles();
 

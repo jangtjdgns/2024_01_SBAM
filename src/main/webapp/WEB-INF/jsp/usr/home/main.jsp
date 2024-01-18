@@ -6,7 +6,7 @@
 
 <%@ include file="../common/header.jsp" %>
 	
-	<section>
+	<section class="max-w-5xl mx-auto">
 		<div>	
 			<div>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt dolores illum alias labore error pariatur laudantium natus fuga mollitia quis quidem ut quae ea magnam recusandae dolorum harum dolore architecto.

@@ -15,3 +15,9 @@
 html>body {
 	font-family: 'NanumSquareNeo-Variable';
 }
+
+/*html>body>table,
+html>body>div,
+html>body>section {
+	margin: 0 auto;
+}*/
