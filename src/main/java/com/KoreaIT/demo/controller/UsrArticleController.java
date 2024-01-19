@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.demo.service.ArticleService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Article;
+import com.KoreaIT.demo.vo.Rq;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UsrArticleController {
@@ -25,9 +26,11 @@ public class UsrArticleController {
 	// write, 작성
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpSession session, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
-		if(session.getAttribute("loginedMemberId") == null) {
+		Rq rq = new Rq(req);
+		
+		if(rq.getLoginedMemberId() == 0) {
 			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
@@ -39,7 +42,7 @@ public class UsrArticleController {
 			return Util.jsHistoryBack("내용을 입력해주세요.");
 		}
 		
-		articleService.writeArticle((int) session.getAttribute("loginedMemberId"), title, body);
+		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 
 		int id = articleService.getLastInsertId();
 
@@ -59,19 +62,15 @@ public class UsrArticleController {
 
 	// detail, 상세보기
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpSession session, Model model, int id) {
+	public String showDetail(HttpServletRequest req, Model model, int id) {
 
-		Article article = articleService.forPrintArticle(id);
-
-		int loginedMemberId = 0;
+		Rq rq = new Rq(req);
 		
-		if(session.getAttribute("loginedMemberId") != null) {
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
+		Article article = articleService.forPrintArticle(id);
 		
 		model.addAttribute("article", article);
 		
-		model.addAttribute("loginedMemberId", loginedMemberId);
+		model.addAttribute("loginedMemberId", rq.getLoginedMemberId());
 		
 		return "usr/article/detail";
 	}
@@ -79,9 +78,11 @@ public class UsrArticleController {
 	// modify, 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(HttpSession session, int id, String title, String body) {
+	public String doModify(HttpServletRequest req, int id, String title, String body) {
 
-		if(session.getAttribute("loginedMemberId") == null) {
+		Rq rq = new Rq(req);
+		
+		if(rq.getLoginedMemberId() == 0) {
 			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
@@ -92,7 +93,7 @@ public class UsrArticleController {
 		}
 		
 		// 권한 체크
-		if(article.getMemberId() != (int) session.getAttribute("loginedMemberId")) {
+		if(article.getMemberId() != rq.getLoginedMemberId()) {
 			return Util.jsHistoryBack(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
 		}
 
@@ -104,9 +105,11 @@ public class UsrArticleController {
 	// delete, 삭제
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(HttpSession session, int id) {
+	public String doDelete(HttpServletRequest req, int id) {
 
-		if(session.getAttribute("loginedMemberId") == null) {
+		Rq rq = new Rq(req);
+		
+		if(rq.getLoginedMemberId() == 0) {
 			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
@@ -117,7 +120,7 @@ public class UsrArticleController {
 		}
 		
 		// 권한 체크
-		if(article.getMemberId() != (int) session.getAttribute("loginedMemberId")) {
+		if(article.getMemberId() != rq.getLoginedMemberId()) {
 			return Util.jsHistoryBack(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
 		}
 
