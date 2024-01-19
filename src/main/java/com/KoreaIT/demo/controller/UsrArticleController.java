@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.demo.service.ArticleService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Article;
-import com.KoreaIT.demo.vo.ResultData;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,27 +25,25 @@ public class UsrArticleController {
 	// write, 작성
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpSession session, String title, String body) {
+	public String doWrite(HttpSession session, String title, String body) {
 
 		if(session.getAttribute("loginedMemberId") == null) {
-			return ResultData.from("F-L", "로그인 후 이용해주세요.");
+			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
 		if (Util.empty(title)) {
-			return ResultData.from("F-1", "제목을 입력해주세요.");
+			return Util.jsHistoryBack("제목을 입력해주세요.");
 		}
 
 		if (Util.empty(body)) {
-			return ResultData.from("F-2", "내용을 입력해주세요.");
+			return Util.jsHistoryBack("내용을 입력해주세요.");
 		}
 		
 		articleService.writeArticle((int) session.getAttribute("loginedMemberId"), title, body);
 
 		int id = articleService.getLastInsertId();
 
-		Article article = articleService.getArticleById(id);
-
-		return ResultData.from("S-1", Util.f("%d번 게시물이 작성되었습니다.", id), article);
+		return Util.jsReplace(Util.f("%d번 게시물이 작성되었습니다.", id), Util.f("detail?id=%s", id));
 	}
 
 	// list, 목록
@@ -71,7 +68,7 @@ public class UsrArticleController {
 		if(session.getAttribute("loginedMemberId") != null) {
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 		}
-				
+		
 		model.addAttribute("article", article);
 		
 		model.addAttribute("loginedMemberId", loginedMemberId);
@@ -82,50 +79,50 @@ public class UsrArticleController {
 	// modify, 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData<Article> doModify(HttpSession session, int id, String title, String body) {
+	public String doModify(HttpSession session, int id, String title, String body) {
 
 		if(session.getAttribute("loginedMemberId") == null) {
-			return ResultData.from("F-L", "로그인 후 이용해주세요.");
+			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Util.f("%d번 게시물은 존재하지 않습니다.", id));
+			return Util.jsHistoryBack(Util.f("%d번 게시물은 존재하지 않습니다.", id));
 		}
 		
 		// 권한 체크
 		if(article.getMemberId() != (int) session.getAttribute("loginedMemberId")) {
-			return ResultData.from("F-A", Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
+			return Util.jsHistoryBack(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
 		}
 
 		articleService.modifyArticle(id, title, body);
 
-		return ResultData.from("S-1", Util.f("%d번 게시물이 수정되었습니다.", id), articleService.getArticleById(id));
+		return Util.jsReplace(Util.f("%d번 게시물이 수정되었습니다.", id), Util.f("detail?id=%s", id));
 	}
 
 	// delete, 삭제
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData doDelete(HttpSession session, int id) {
+	public String doDelete(HttpSession session, int id) {
 
 		if(session.getAttribute("loginedMemberId") == null) {
-			return ResultData.from("F-L", "로그인 후 이용해주세요.");
+			return Util.jsReplace("로그인 후 이용해주세요.", "/usr/member/login");
 		}
 		
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Util.f("%d번 게시물은 존재하지 않습니다.", id));
+			return Util.jsHistoryBack(Util.f("%d번 게시물은 존재하지 않습니다.", id));
 		}
 		
 		// 권한 체크
 		if(article.getMemberId() != (int) session.getAttribute("loginedMemberId")) {
-			return ResultData.from("F-A", Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
+			return Util.jsHistoryBack(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
 		}
 
 		articleService.deleteArticleById(id);
-
-		return ResultData.from("S-1", Util.f("%d번 게시물이 삭제되었습니다.", id));
+		
+		return Util.jsReplace(Util.f("%d번 게시물이 삭제되었습니다.", id), "list");
 	}
 }

@@ -5,14 +5,15 @@
 	<c:set var="pageTitle" value="DETAIL"/>
 
 <%@ include file="../common/header.jsp" %>
-	
-	<div class="text-sm breadcrumbs">
-		<ul class="max-w-5xl mx-auto">
-			<li><a href="/">Home</a></li> 
-			<li><a href="/usr/article/list">List</a></li>
-			<li><a href="detail?id=33">${article.id }번</a></li>
-		</ul>
-	</div>
+	<section>
+		<div class="max-w-5xl mx-auto my-2.5 h-20 text-sm breadcrumbs px-2 flex flex-row justify-between items-end">
+			<ul>
+				<li><a href="/">Home</a></li> 
+				<li><a href="/usr/article/list">List</a></li>
+				<li><a href="detail?id=33">${article.id }번</a></li>
+			</ul>
+		</div>
+	</section>
 	
 	<section>
 		<div class="w-full max-w-5xl mx-auto">
