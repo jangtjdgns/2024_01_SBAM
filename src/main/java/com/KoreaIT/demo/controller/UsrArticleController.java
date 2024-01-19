@@ -66,9 +66,15 @@ public class UsrArticleController {
 
 		Article article = articleService.forPrintArticle(id);
 
+		int loginedMemberId = 0;
+		
+		if(session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+				
 		model.addAttribute("article", article);
 		
-		model.addAttribute("loginedMemberId", session.getAttribute("loginedMemberId"));
+		model.addAttribute("loginedMemberId", loginedMemberId);
 		
 		return "usr/article/detail";
 	}

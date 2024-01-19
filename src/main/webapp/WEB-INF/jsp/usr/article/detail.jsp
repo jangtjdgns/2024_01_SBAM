@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-	<c:set var="pageTitle" value="LIST"/>
+	<c:set var="pageTitle" value="DETAIL"/>
 
 <%@ include file="../common/header.jsp" %>
 	
@@ -40,9 +40,9 @@
 			<div>
 				<button class="btn" onclick="history.back()">Back</button>
 				
-				<c:if test="${ loginedMemberId != null && loginedMemberId == article.memberId }">
-					<a href="modify?id=${article.id}" class="btn btn-success">수정</a>
-					<a href="doDelete?id=${article.id}" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>
+				<c:if test="${loginedMemberId == article.memberId }">
+					<a href="modify?id=${article.id }" class="btn btn-success">수정</a>
+					<a href="doDelete?id=${article.id }" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>
 				</c:if>
 			</div>
 		</div>
