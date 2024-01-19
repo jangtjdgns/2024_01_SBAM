@@ -5,8 +5,31 @@
 	<c:set var="pageTitle" value="LIST"/>
 
 <%@ include file="../common/header.jsp" %>
-	<section class="w-full max-w-5xl mx-auto">
-		<div>
+
+	<section>
+		<div class="max-w-5xl mx-auto my-2.5 h-20 text-sm breadcrumbs px-2 flex flex-row justify-between items-end">
+			<ul>
+				<li><a href="/">Home</a></li> 
+				<li><a href="/usr/article/list">List</a></li>
+			</ul>
+			
+			<div class="flex justify-around items-center max-w-md h-9">
+				<select class="select select-bordered min-h-0 h-9">
+					<option value="10" selected>10개씩</option>
+					<option value="15">15개씩</option>
+					<option value="20">20개씩</option>
+					<option value="30">30개씩</option>
+					<option value="40">40개씩</option>
+					<option value="50">50개씩</option>
+				</select>
+				<input type="text" placeholder="Search here" class="input input-bordered w-3/5 h-9"/>
+				<a href=""><i class="fa-solid fa-magnifying-glass text-2xl"></i></a>
+			</div>
+		</div>
+	</section>
+	
+	<section>
+		<div class="max-w-5xl mx-auto">
 			<table class="table">
 				<thead class="bg-gray-100 text-center">
 					<tr>
@@ -34,16 +57,18 @@
 			</table>
 		</div>
 	</section>
-	
-	<div class="text-center py-8">
-		<div class="join">
-			<button class="join-item btn btn-sm">«</button>
-			<button class="join-item btn btn-sm btn-active">1</button>
-			<button class="join-item btn btn-sm">2</button>
-			<button class="join-item btn btn-sm">3</button>
-			<button class="join-item btn btn-sm">4</button>
-			<button class="join-item btn btn-sm">»</button>
+
+	<section>
+		<div class="text-center">
+			<div class="join">
+				<button class="join-item btn btn-sm">«</button>
+				<button class="join-item btn btn-sm btn-active">1</button>
+				<button class="join-item btn btn-sm">2</button>
+				<button class="join-item btn btn-sm">3</button>
+				<button class="join-item btn btn-sm">4</button>
+				<button class="join-item btn btn-sm">»</button>
+			</div>
 		</div>
-	</div>
+	</section>
 
 <%@ include file="../common/footer.jsp" %>

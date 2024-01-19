@@ -16,8 +16,10 @@ html>body {
 	font-family: 'NanumSquareNeo-Variable';
 }
 
-/*html>body>table,
-html>body>div,
-html>body>section {
-	margin: 0 auto;
-}*/
+html>body>.navbar {
+	min-height: 8vh;
+}
+
+html>body>.hero {
+	min-height: 92vh;
+}

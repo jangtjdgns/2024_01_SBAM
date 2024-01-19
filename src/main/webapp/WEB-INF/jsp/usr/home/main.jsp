@@ -5,16 +5,16 @@
 	<c:set var="pageTitle" value="MAIN"/>
 
 <%@ include file="../common/header.jsp" %>
-	
-	<section class="max-w-5xl mx-auto">
-		<div>	
-			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt dolores illum alias labore error pariatur laudantium natus fuga mollitia quis quidem ut quae ea magnam recusandae dolorum harum dolore architecto.
-			</div>
-			<div>
-				안녕하세요.
+
+	<div class="mx-auto hero bg-base-200">
+		<div class="hero-content text-center">
+			<div class="max-w-md">
+				<h1 class="text-5xl font-bold">Hello there</h1>
+				<p class="py-6">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt dolores illum alias labore error pariatur laudantium natus fuga mollitia quis quidem ut quae ea magnam recusandae dolorum harum dolore architecto.
+				</p>
+				<button class="btn btn-primary">Get Started</button>
 			</div>
 		</div>
-	</section>
-
+	</div>
 <%@ include file="../common/footer.jsp" %>

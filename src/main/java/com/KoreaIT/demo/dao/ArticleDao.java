@@ -58,7 +58,7 @@ public interface ArticleDao {
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
 				ORDER BY a.id DESC
-				Limit 0, 15
+				Limit 0, 10
 			""")
 	public List<Article> getArticles();
 
