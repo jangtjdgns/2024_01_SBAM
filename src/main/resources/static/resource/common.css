@@ -1,15 +1,15 @@
 @font-face {
-    font-family: 'NPSfontBold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
+	font-family: 'NPSfontBold';
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'NanumSquareNeo-Variable';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'NanumSquareNeo-Variable';
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+	font-weight: normal;
+	font-style: normal;
 }
 
 html>body {
@@ -22,4 +22,31 @@ html>body>.navbar {
 
 html>body>.hero {
 	min-height: 92vh;
+}
+
+
+html>body .content-box {
+	-webkit-animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+
+html>body .cb-2 {
+	animation-delay: .05s;
+}
+
+html>body .cb-3 {
+	animation-delay: .1s;
+}
+
+@keyframes slide-top {
+	0% {
+		-webkit-transform: translateY(200px);
+		transform: translateY(200px);
+	}
+
+	100% {
+		-webkit-transform: translateY(-50px);
+		transform: translateY(-50px);
+	}
 }

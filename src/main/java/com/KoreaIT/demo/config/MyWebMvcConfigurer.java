@@ -1,11 +1,13 @@
 package com.KoreaIT.demo.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.KoreaIT.demo.interceptor.BeforeActionInterceptor;
 import com.KoreaIT.demo.interceptor.NeedLoginInterceptor;
 
+@Configuration
 public class MyWebMvcConfigurer implements WebMvcConfigurer {
 	
 	private BeforeActionInterceptor beforeActionInterceptor;
