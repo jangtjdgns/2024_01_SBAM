@@ -7,7 +7,7 @@
 <%@ include file="../common/header.jsp"%>
 
 <script>
-	const loginFormSubmit = function(form){
+	const loginFormOnSubmit = function(form){
 		form.loginId.value = form.loginId.value.trim();
 		form.loginPw.value = form.loginPw.value.trim();
 		
@@ -27,21 +27,25 @@
 	}
 </script>
 
-<section class="h-body py-44">
+<!-- required -->
+<section class="h-body py-40">
 	<div class="card shrink-0 w-full mx-auto max-w-sm shadow-2xl bg-base-100 scale-110">
-		<form class="card-body" action="doLogin" method="post" onsubmit="loginFormSubmit(this); return false;">
+		<form class="card-body" action="doLogin" method="post" onsubmit="loginFormOnSubmit(this); return false;">
 			<div class="form-control">
-				<label class="label"> <span class="label-text">User</span>
-				</label> <input type="text" name="loginId" placeholder="User" class="input input-bordered" required />
+				<label class="label"> <span class="label-text">User</span></label>
+				<input type="text" name="loginId" placeholder="User" class="input input-bordered" />
 			</div>
 			<div class="form-control">
-				<label class="label"> <span class="label-text">Password</span>
-				</label> <input type="password" name="loginPw" placeholder="password" class="input input-bordered" required /> <label class="label">
+				<label class="label"> <span class="label-text">Password</span></label>
+				<input type="password" name="loginPw" placeholder="password" class="input input-bordered" /> <label class="label">
 					<a href="#" class="label-text-alt link link-hover">Forgot password?</a>
 				</label>
 			</div>
 			<div class="form-control mt-6">
 				<button class="btn btn-primary">Login</button>
+			</div>
+			<div class="form-control mt-6">
+				<button type="button" class="btn" onclick="history.back()">Back</button>
 			</div>
 		</form>
 	</div>

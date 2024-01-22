@@ -65,34 +65,17 @@ public class UsrMemberController {
 	}
 
 	@RequestMapping("/usr/member/login")
-	public String login(HttpServletRequest req) {
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		if(rq.getLoginedMemberId() != 0) {
-			return Util.jsHistoryBack("로그아웃 후 이용해주세요.");
-		}
+	public String login() {
 		
 		return "usr/member/login";
 	}
 	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(HttpSession session, String loginId, String loginPw) {
+	public String doLogin(HttpServletRequest req, HttpSession session, String loginId, String loginPw) {
 		
-		// 로그아웃 시 이용가능
-		if(session.getAttribute("loginedMemberId") != null) {
-			return Util.jsHistoryBack("로그아웃 후 이용해주세요.");
-		}
-		
-		// null 검증
-		if(Util.empty(loginId)) {
-			return Util.jsHistoryBack("아이디를 입력해주세요.");
-		}
-		
-		if(Util.empty(loginPw)) {
-			return Util.jsHistoryBack("비밀번호를 입력해주세요.");
-		}
-		
+		Rq rq = (Rq) req.getAttribute("rq");
+				
 		// 아이디가 존재하지 않는 경우
 		Member member = memberService.getMemberByLoginId(loginId);
 		
@@ -105,23 +88,18 @@ public class UsrMemberController {
 			return Util.jsHistoryBack("비밀번호를 확인해주세요.");
 		}
 		
-		// 아이디와 비밀번호가 문제가 없을 때
-		session.setAttribute("loginedMemberId", member.getId());
+		rq.login(member);
 		
 		return Util.jsReplace(Util.f("%s 님 환영합니다~", member.getNickname()), "/");
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public String doLogin(HttpSession session) {
+	public String doLogout(HttpServletRequest req, HttpSession session) {
 		
-		// 로그인 시 이용가능
-		if(session.getAttribute("loginedMemberId") == null) {
-			return Util.jsReplace("로그인 후 이용해주세요.", "login");
-		}
+		Rq rq = (Rq) req.getAttribute("rq");
 		
-		// 세션 삭제
-		session.removeAttribute("loginedMemberId");
+		rq.logout();
 		
 		return Util.jsReplace("로그아웃 되었습니다.", "/");
 	}

@@ -14,12 +14,13 @@ public class Rq {
 	@Getter
 	private int loginedMemberId;
 	private HttpServletResponse res;
+	private HttpSession session;
 	
 	public Rq(HttpServletRequest req, HttpServletResponse res) {
 		
 		this.res = res;
 		
-		HttpSession session = req.getSession();
+		this.session = req.getSession();
 		
 		int loginedMemberId = 0;
 		
@@ -33,12 +34,19 @@ public class Rq {
 	public void jsPrintHistoryBack(String msg) {
 		res.setContentType("text/html; charset=UTF-8;");
 		
-		// 예외 처리가 필요함
 		try {
 			res.getWriter().append(Util.jsHistoryBack(msg));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void login(Member member) {
+		this.session.setAttribute("loginedMemberId", member.getId());
+	}
+	
+	public void logout() {
+		this.session.removeAttribute("loginedMemberId");
 	}
 }

@@ -23,13 +23,13 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		// "/resource/**" 이 경로를 제외하고 모든 경로는 beforeActionInterceptor 를 거침
 		registry.addInterceptor(beforeActionInterceptor).addPathPatterns("/**").excludePathPatterns("/resource/**");
 		
 		registry.addInterceptor(needLoginInterceptor).addPathPatterns("/usr/article/doWrite")
-				.addPathPatterns("/usr/article/doModify").addPathPatterns("/usr/article/doDelete");
+				.addPathPatterns("/usr/article/doModify").addPathPatterns("/usr/article/doDelete")
+				.addPathPatterns("/usr/member/doLogout");
 
 		registry.addInterceptor(needLogoutInterceptor).addPathPatterns("/usr/member/login")
-				.addPathPatterns("/usr/member/login");
+				.addPathPatterns("/usr/member/doLogin").addPathPatterns("/usr/member/doJoin");
 	}
 }
