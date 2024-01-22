@@ -6,21 +6,20 @@
 
 <%@ include file="../common/header.jsp" %>
 
-	<section>
-		<div class="max-w-5xl mx-auto my-2.5 h-20 text-sm breadcrumbs px-2 flex flex-row justify-between items-end">
+	
+	<section class="h-body py-5">
+		<!-- 검색 -->
+		<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
 			<ul>
 				<li><a href="/">Home</a></li> 
 				<li><a href="/usr/article/list">List</a></li>
 			</ul>
 			<form action="list" method="get">
 				<div class="flex justify-around items-center max-w-md h-9">
-					<select class="select select-bordered min-h-0 h-9">
-						<option value="10" selected>10개씩</option>
-						<option value="15">15개씩</option>
-						<option value="20">20개씩</option>
-						<option value="30">30개씩</option>
-						<option value="40">40개씩</option>
-						<option value="50">50개씩</option>
+					<select class="select select-bordered min-h-0 h-9" name="itemsInAPage">
+						<c:forEach begin="${10 }" end="${50 }" step="5" var="i">
+							<option value="${i }" <c:if test="${itemsInAPage eq i }">selected</c:if>>${i }개씩</option>
+						</c:forEach>
 					</select>
 				
 					<input type="text" name="searchKeyword" placeholder="Search here" class="input input-bordered w-3/5 h-9" value="${searchKeyword }" />
@@ -29,9 +28,8 @@
 				</div>
 			</form>
 		</div>
-	</section>
-	
-	<section>
+		
+		<!-- 게시물 -->
 		<div class="max-w-5xl mx-auto">
 			<table class="table">
 				<thead class="bg-gray-100 text-center">
@@ -65,23 +63,22 @@
 				</tbody>
 			</table>
 		</div>
-	</section>
-
-	<section>
-		<div class="text-center">
+		
+		<!-- 페이징버튼 -->
+		<div class="text-center pt-7">
 			<div class="join">
 				<c:if test="${from ne 1 }">
-					<a href="list?page=1&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">«</a>
-					<a href="list?page=${from - 1}&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">&lt;</a>
+					<a href="list?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">«</a>
+					<a href="list?page=${from - 1}&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">&lt;</a>
 				</c:if>
 				
 				<c:forEach begin="${from }" end="${end }" step="1" var="i">
-					<a href="list?page=${i }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
+					<a href="list?page=${i }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
 				</c:forEach>
 				
 				<c:if test="${end ne totalPageCnt}">
-					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">&gt;</a>
-					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">»</a>
+					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">&gt;</a>
+					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">»</a>
 				</c:if>
 			</div>
 		</div>

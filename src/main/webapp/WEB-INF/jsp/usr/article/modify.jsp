@@ -27,8 +27,8 @@
 	}
 </script>
 
-<section>
-	<div class="max-w-5xl mx-auto my-2.5 h-20 text-sm breadcrumbs px-2 flex flex-row justify-between items-end">
+<section class="h-body py-5">
+	<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
@@ -36,12 +36,10 @@
 			<li><a href="detail?id=${article.id }">${article.id }번</a></li>
 		</ul>
 	</div>
-</section>
 
-<section>
 	<div class="w-full max-w-5xl mx-auto">
-		<form action="doModify" method="post">
-		<input type="hidden" name="id" value="${article.id }" onsubmit="modifyFormOnSubmit(this); return false;" />
+		<form action="doModify" method="post" onsubmit="modifyFormOnSubmit(this); return false;">
+		<input type="hidden" name="id" value="${article.id }" />
 			<div>
 				<table class="table">
 					<tr>

@@ -47,7 +47,7 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, Integer page, String searchKeyword) {
+	public String showList(Model model, Integer page, Integer itemsInAPage, String searchKeyword) {
 		
 		// 현재 페이지가 0 이하 일 경우 1로 초기화
 		if(page == null || page <= 0) {
@@ -60,8 +60,10 @@ public class UsrArticleController {
 		}
 		searchKeyword = searchKeyword.trim();
 	
-		// 한 페이지에 표시될 게시물의 수
-		int itemsInAPage = 10;
+		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
+		if(itemsInAPage == null) {
+			itemsInAPage = 10;
+		}
 		
 		// DB limit 시작 부분
 		int limitFrom = (page - 1) * itemsInAPage;
@@ -86,6 +88,7 @@ public class UsrArticleController {
 		model.addAttribute("page", page);
 		model.addAttribute("from", from);
 		model.addAttribute("end", end);
+		model.addAttribute("itemsInAPage", itemsInAPage);
 		model.addAttribute("searchKeyword", searchKeyword);
 		
 		return "usr/article/list";
