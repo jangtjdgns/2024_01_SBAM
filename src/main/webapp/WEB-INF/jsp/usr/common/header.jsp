@@ -17,7 +17,7 @@
 </head>
 <body>
 <!-- shadow-xl rounded-box -->
-	<div class="mx-auto max-w-5xl navbar bg-base-100">
+	<div class="mx-auto max-w-5xl navbar h-header bg-base-100">
 	  <div class="navbar-start">
 	    <div class="dropdown">
 	      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">

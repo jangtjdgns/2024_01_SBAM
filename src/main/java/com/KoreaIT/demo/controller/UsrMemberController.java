@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.demo.service.MemberService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Member;
+import com.KoreaIT.demo.vo.Rq;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -62,6 +64,17 @@ public class UsrMemberController {
 		return Util.jsReplace("회원가입 되었습니다.", "/");
 	}
 
+	@RequestMapping("/usr/member/login")
+	public String login(HttpServletRequest req) {
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		if(rq.getLoginedMemberId() != 0) {
+			return Util.jsHistoryBack("로그아웃 후 이용해주세요.");
+		}
+		
+		return "usr/member/login";
+	}
+	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(HttpSession session, String loginId, String loginPw) {

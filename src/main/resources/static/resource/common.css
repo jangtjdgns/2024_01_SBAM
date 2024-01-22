@@ -16,11 +16,11 @@ html>body {
 	font-family: 'NanumSquareNeo-Variable';
 }
 
-html>body>.navbar {
+.h-header {
 	min-height: 8vh;
 }
 
-html>body>.hero {
+.h-body {
 	min-height: 92vh;
 }
 
