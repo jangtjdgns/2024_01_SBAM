@@ -32,7 +32,7 @@
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
-			<li><a href="modify?id=${article.id }">modify</a></li>
+			<li><a href="modify?id=${article.id }">Modify</a></li>
 			<li><a href="detail?id=${article.id }">${article.id }번</a></li>
 		</ul>
 	</div>

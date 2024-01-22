@@ -61,12 +61,19 @@
 	<section>
 		<div class="text-center">
 			<div class="join">
-				<button class="join-item btn btn-sm">«</button>
-				<button class="join-item btn btn-sm btn-active">1</button>
-				<button class="join-item btn btn-sm">2</button>
-				<button class="join-item btn btn-sm">3</button>
-				<button class="join-item btn btn-sm">4</button>
-				<button class="join-item btn btn-sm">»</button>
+				<c:if test="${from ne 1 }">
+					<a href="list?page=1" class="join-item btn btn-sm">«</a>
+					<a href="list?page=${from - 1}" class="join-item btn btn-sm">&lt;</a>
+				</c:if>
+				
+				<c:forEach begin="${from }" end="${end }" step="1" var="i">
+					<a href="list?page=${i }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
+				</c:forEach>
+				
+				<c:if test="${end ne totalPageCnt}">
+					<a href="list?page=${end + 1 }" class="join-item btn btn-sm">&gt;</a>
+					<a href="list?page=${totalPageCnt }" class="join-item btn btn-sm">»</a>
+				</c:if>
 			</div>
 		</div>
 	</section>

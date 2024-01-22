@@ -43,7 +43,7 @@
 			</div>
 		
 			<div>
-				<button class="btn" onclick="history.back()">Back</button>
+				<a href="list" class="btn">Back</a>
 				
 				<c:if test="${loginedMemberId == article.memberId }">
 					<a href="modify?id=${article.id }" class="btn">수정</a>

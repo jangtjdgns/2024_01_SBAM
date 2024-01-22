@@ -58,9 +58,9 @@ public interface ArticleDao {
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
 				ORDER BY a.id DESC
-				Limit 0, 10
+				Limit #{limitFrom}, #{itemsInAPage}
 			""")
-	public List<Article> getArticles();
+	public List<Article> getArticles(int limitFrom, int itemsInAPage);
 
 	@Select("""
 			SELECT LAST_INSERT_ID();
@@ -75,4 +75,7 @@ public interface ArticleDao {
 				WHERE a.id = #{id}
 			""")
 	public Article forPrintArticle(int id);
+
+	@Select("SELECT COUNT(*) FROM article;")
+	public int getTotalCount();
 }

@@ -32,8 +32,8 @@ public class ArticleService {
 		articleDao.modifyArticle(id, title, body);
 	}
 
-	public List<Article> getArticles() {
-		return articleDao.getArticles();
+	public List<Article> getArticles(int limitFrom, int itemsInAPage) {
+		return articleDao.getArticles(limitFrom, itemsInAPage);
 	}
 
 	public int getLastInsertId() {
@@ -42,5 +42,9 @@ public class ArticleService {
 	
 	public Article forPrintArticle(int id) {
 		return articleDao.forPrintArticle(id);
+	}
+
+	public int getTotalCount() {
+		return articleDao.getTotalCount();
 	}
 }

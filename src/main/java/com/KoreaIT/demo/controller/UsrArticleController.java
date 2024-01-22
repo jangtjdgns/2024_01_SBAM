@@ -47,11 +47,40 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model) {
+	public String showList(Model model, Integer page) {
+		
+		// 현재 페이지가 0 이하 일 경우 1로 초기화
+		if(page == null || page <= 0) {
+			page = 1;
+		}
 	
-		List<Article> articles = articleService.getArticles();
+		// 한 페이지에 표시될 게시물의 수
+		int itemsInAPage = 10;
+		
+		// DB limit 시작 부분
+		int limitFrom = (page - 1) * itemsInAPage;
+		
+		// 게시물의 전체 수
+		int totalCount = articleService.getTotalCount();
+		
+		// 전체 페이지 수
+		int totalPageCnt = (int) Math.ceil((double) totalCount / itemsInAPage);
+		
+		// 페이징 버튼 시작
+		int from = ((page - 1) / 10) * 10 + 1;
+		
+		// 페이징 버튼 끝
+		int end = ((page - 1) / 10 + 1) * 10;
+		end = end > totalPageCnt ? totalPageCnt : end;
+		
+		
+		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage);
 	
 		model.addAttribute("articles", articles);
+		model.addAttribute("totalPageCnt", totalPageCnt);
+		model.addAttribute("page", page);
+		model.addAttribute("from", from);
+		model.addAttribute("end", end);
 		
 		return "usr/article/list";
 	}
