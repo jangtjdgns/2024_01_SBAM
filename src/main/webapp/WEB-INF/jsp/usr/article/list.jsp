@@ -12,19 +12,22 @@
 				<li><a href="/">Home</a></li> 
 				<li><a href="/usr/article/list">List</a></li>
 			</ul>
-			
-			<div class="flex justify-around items-center max-w-md h-9">
-				<select class="select select-bordered min-h-0 h-9">
-					<option value="10" selected>10개씩</option>
-					<option value="15">15개씩</option>
-					<option value="20">20개씩</option>
-					<option value="30">30개씩</option>
-					<option value="40">40개씩</option>
-					<option value="50">50개씩</option>
-				</select>
-				<input type="text" placeholder="Search here" class="input input-bordered w-3/5 h-9"/>
-				<a href=""><i class="fa-solid fa-magnifying-glass text-2xl"></i></a>
-			</div>
+			<form action="list" method="get">
+				<div class="flex justify-around items-center max-w-md h-9">
+					<select class="select select-bordered min-h-0 h-9">
+						<option value="10" selected>10개씩</option>
+						<option value="15">15개씩</option>
+						<option value="20">20개씩</option>
+						<option value="30">30개씩</option>
+						<option value="40">40개씩</option>
+						<option value="50">50개씩</option>
+					</select>
+				
+					<input type="text" name="searchKeyword" placeholder="Search here" class="input input-bordered w-3/5 h-9" value="${searchKeyword }" />
+					<button><i class="fa-solid fa-magnifying-glass text-2xl"></i></button>
+				
+				</div>
+			</form>
 		</div>
 	</section>
 	
@@ -43,6 +46,12 @@
 				</thead>
 			
 				<tbody>
+					<c:if test="${articles.size() == 0 }">
+						<tr>
+							<td class="text-center" colspan="6">등록된 게시물이 없습니다 <button class="underline text-red-600" onclick="history.back()">돌아가기</button></td>
+						</tr>
+					</c:if>
+					
 					<c:forEach var="article" items="${articles }">
 						<tr>
 							<td>${article.id }</td>
@@ -62,17 +71,17 @@
 		<div class="text-center">
 			<div class="join">
 				<c:if test="${from ne 1 }">
-					<a href="list?page=1" class="join-item btn btn-sm">«</a>
-					<a href="list?page=${from - 1}" class="join-item btn btn-sm">&lt;</a>
+					<a href="list?page=1&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">«</a>
+					<a href="list?page=${from - 1}&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">&lt;</a>
 				</c:if>
 				
 				<c:forEach begin="${from }" end="${end }" step="1" var="i">
-					<a href="list?page=${i }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
+					<a href="list?page=${i }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
 				</c:forEach>
 				
 				<c:if test="${end ne totalPageCnt}">
-					<a href="list?page=${end + 1 }" class="join-item btn btn-sm">&gt;</a>
-					<a href="list?page=${totalPageCnt }" class="join-item btn btn-sm">»</a>
+					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">&gt;</a>
+					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }" class="join-item btn btn-sm">»</a>
 				</c:if>
 			</div>
 		</div>

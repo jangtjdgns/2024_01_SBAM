@@ -47,12 +47,18 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, Integer page) {
+	public String showList(Model model, Integer page, String searchKeyword) {
 		
 		// 현재 페이지가 0 이하 일 경우 1로 초기화
 		if(page == null || page <= 0) {
 			page = 1;
 		}
+		
+		// 검색어
+		if(searchKeyword == null) {
+			searchKeyword = "";
+		}
+		searchKeyword = searchKeyword.trim();
 	
 		// 한 페이지에 표시될 게시물의 수
 		int itemsInAPage = 10;
@@ -61,7 +67,7 @@ public class UsrArticleController {
 		int limitFrom = (page - 1) * itemsInAPage;
 		
 		// 게시물의 전체 수
-		int totalCount = articleService.getTotalCount();
+		int totalCount = articleService.getTotalCount(searchKeyword);
 		
 		// 전체 페이지 수
 		int totalPageCnt = (int) Math.ceil((double) totalCount / itemsInAPage);
@@ -73,14 +79,14 @@ public class UsrArticleController {
 		int end = ((page - 1) / 10 + 1) * 10;
 		end = end > totalPageCnt ? totalPageCnt : end;
 		
-		
-		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage);
+		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage, searchKeyword);
 	
 		model.addAttribute("articles", articles);
 		model.addAttribute("totalPageCnt", totalPageCnt);
 		model.addAttribute("page", page);
 		model.addAttribute("from", from);
 		model.addAttribute("end", end);
+		model.addAttribute("searchKeyword", searchKeyword);
 		
 		return "usr/article/list";
 	}

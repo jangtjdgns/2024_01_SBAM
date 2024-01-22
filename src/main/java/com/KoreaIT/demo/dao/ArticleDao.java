@@ -57,10 +57,11 @@ public interface ArticleDao {
 				FROM article as A
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
+				WHERE A.title LIKE CONCAT('%', #{searchKeyword}, '%')
 				ORDER BY a.id DESC
 				Limit #{limitFrom}, #{itemsInAPage}
 			""")
-	public List<Article> getArticles(int limitFrom, int itemsInAPage);
+	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword);
 
 	@Select("""
 			SELECT LAST_INSERT_ID();
@@ -76,6 +77,10 @@ public interface ArticleDao {
 			""")
 	public Article forPrintArticle(int id);
 
-	@Select("SELECT COUNT(*) FROM article;")
-	public int getTotalCount();
+	@Select("""
+			SELECT COUNT(*)
+				FROM article
+				WHERE title LIKE CONCAT('%', #{searchKeyword} ,'%')
+			""")
+	public int getTotalCount(String searchKeyword);
 }
