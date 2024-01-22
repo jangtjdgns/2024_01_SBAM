@@ -59,19 +59,36 @@ public class UsrArticleController {
 	// detail, 상세보기
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
 		
 		Article article = articleService.forPrintArticle(id);
 		
 		model.addAttribute("article", article);
 		
-		model.addAttribute("loginedMemberId", rq.getLoginedMemberId());
-		
 		return "usr/article/detail";
 	}
 
-	// modify, 수정
+	// modify, 수정 페이지
+	@RequestMapping("/usr/article/modify")
+	public String modify(HttpServletRequest req, Model model, int id) {
+		
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		Article article = articleService.forPrintArticle(id);
+
+		if (article == null) {
+			return rq.jsReturnOnView(Util.f("%d번 게시물은 존재하지 않습니다.", id));
+		}
+		
+		if(article.getMemberId() != rq.getLoginedMemberId()) {
+			return rq.jsReturnOnView(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
+		}
+		
+		model.addAttribute("article", article);
+		
+		return "usr/article/modify";
+	}
+	
+	// doModify, 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
 	public String doModify(HttpServletRequest req, int id, String title, String body) {
@@ -84,7 +101,6 @@ public class UsrArticleController {
 			return Util.jsHistoryBack(Util.f("%d번 게시물은 존재하지 않습니다.", id));
 		}
 		
-		// 권한 체크
 		if(article.getMemberId() != rq.getLoginedMemberId()) {
 			return Util.jsHistoryBack(Util.f("%d번 게시물에 대한 권한이 없습니다.", id));
 		}

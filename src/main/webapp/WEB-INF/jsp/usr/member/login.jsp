@@ -19,7 +19,7 @@
 		
 		if (form.loginPw.value.length == 0) {
 			alert('비밀번호를 입력해주세요');
-			form.loginId.focus();
+			form.loginPw.focus();
 			return;
 		}
 		

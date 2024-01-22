@@ -13,10 +13,13 @@ public class Rq {
 	
 	@Getter
 	private int loginedMemberId;
+	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private HttpSession session;
 	
 	public Rq(HttpServletRequest req, HttpServletResponse res) {
+		
+		this.req = req;
 		
 		this.res = res;
 		
@@ -31,6 +34,7 @@ public class Rq {
 		this.loginedMemberId = loginedMemberId;
 	}
 
+	// Interceptor에서 사용, controller 까지 넘어갈 필요가 없을 때
 	public void jsPrintHistoryBack(String msg) {
 		res.setContentType("text/html; charset=UTF-8;");
 		
@@ -41,11 +45,19 @@ public class Rq {
 		}
 		
 	}
+	
+	// controller에서 사용
+	public String jsReturnOnView(String msg) {
+		this.req.setAttribute("msg", msg);
+		return "usr/common/js";
+	}
 
+	// 세션 로그인
 	public void login(Member member) {
 		this.session.setAttribute("loginedMemberId", member.getId());
 	}
 	
+	// 세션 로그아웃
 	public void logout() {
 		this.session.removeAttribute("loginedMemberId");
 	}

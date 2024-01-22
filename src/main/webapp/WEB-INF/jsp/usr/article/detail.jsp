@@ -10,7 +10,7 @@
 			<ul>
 				<li><a href="/">Home</a></li> 
 				<li><a href="/usr/article/list">List</a></li>
-				<li><a href="detail?id=33">${article.id }번</a></li>
+				<li><a href="detail?id=${article.id }">${article.id }번</a></li>
 			</ul>
 		</div>
 	</section>
@@ -35,6 +35,10 @@
 						<th>작성일</th>
 						<td>${article.regDate.substring(2, 16) }</td>
 					</tr>
+					<tr>
+						<th>내용</th>
+						<td>${article.body }</td>
+					</tr>
 				</table>
 			</div>
 		
@@ -42,7 +46,7 @@
 				<button class="btn" onclick="history.back()">Back</button>
 				
 				<c:if test="${loginedMemberId == article.memberId }">
-					<a href="modify?id=${article.id }" class="btn btn-success">수정</a>
+					<a href="modify?id=${article.id }" class="btn">수정</a>
 					<a href="doDelete?id=${article.id }" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>
 				</c:if>
 			</div>
