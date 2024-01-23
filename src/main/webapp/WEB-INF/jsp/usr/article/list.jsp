@@ -5,8 +5,6 @@
 	<c:set var="pageTitle" value="LIST"/>
 
 <%@ include file="../common/header.jsp" %>
-
-	
 	<section class="h-body py-5">
 		<!-- 검색 -->
 		<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">

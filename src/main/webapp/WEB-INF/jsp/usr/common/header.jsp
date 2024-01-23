@@ -49,24 +49,16 @@
 	    </c:if>
 	    
 	    <c:if test="${rq.loginedMemberId != 0 }">
+		    <div class="avatar placeholder pl-2.5">
+				<div class="bg-neutral rounded-full self-center text-white w-8 h-8">
+				<span class="text-xs">${rq.getNickName() }</span>
+			</div>
 	    	<a href="../member/doLogout" class="btn btn-ghost">LOGOUT</a>
+		</div> 
 	    </c:if>
-	    
+
 	    <!-- <a class="tooltip" data-tip="Home">
 	      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
 	    </a> -->
 	  </div>
 	</div>
-	
-	<!-- <div class="max-w-5xl text-center py-10">
-		<ul class="flex text-2xl justify-end">
-			<li class="pl-6"><a href="/">HOME</a></li>
-			<li class="pl-6"><a href="/usr/article/list">LIST</a></li>
-		</ul>
-	</div> -->
-
-	<%-- <section class="max-w-5xl text-base">
-		<div>
-			<h1>${pageTitle } PAGE</h1>
-		</div>
-	</section> --%>
