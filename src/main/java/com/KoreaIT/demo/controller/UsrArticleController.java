@@ -23,6 +23,11 @@ public class UsrArticleController {
 		this.articleService = articleService;
 	}
 
+	@RequestMapping("/usr/article/write")
+	public String write() {
+		return "usr/article/write";
+	}
+	
 	// write, 작성
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody

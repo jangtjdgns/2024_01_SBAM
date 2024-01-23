@@ -63,8 +63,9 @@
 		</div>
 		
 		<!-- 페이징버튼 -->
-		<div class="text-center pt-7">
-			<div class="join">
+		<div class="w-1/5 pt-7 max-w-5xl mx-auto flex">
+			<div></div>
+			<div class="join w-3/5">
 				<c:if test="${from ne 1 }">
 					<a href="list?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">«</a>
 					<a href="list?page=${from - 1}&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">&lt;</a>
@@ -79,6 +80,12 @@
 					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">»</a>
 				</c:if>
 			</div>
+			
+			<c:if test="${rq.loginedMemberId != 0}">
+				<div class="w-1/5">
+					<a href="write" class="btn btn-sm">글작성</a>
+				</div>
+			</c:if>
 		</div>
 	</section>
 

@@ -2,12 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="MODIFY" />
+<c:set var="pageTitle" value="WRITE" />
 
 <%@ include file="../common/header.jsp"%>
 
 <script>
-	const modifyFormOnSubmit = function(form){
+	const writeFormOnSubmit = function(form){
 		form.title.value = form.title.value.trim();
 		form.body.value = form.body.value.trim();
 		
@@ -32,20 +32,15 @@
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
-			<li><a href="modify?id=${article.id }">Modify</a></li>
-			<li><a href="detail?id=${article.id }">${article.id }번</a></li>
+			<li><a href="write">write</a></li>
 		</ul>
 	</div>
 
 	<div class="w-full max-w-5xl mx-auto">
-		<form action="doModify" method="post" onsubmit="modifyFormOnSubmit(this); return false;">
+		<form action="doWrite" method="post" onsubmit="writeFormOnSubmit(this); return false;">
 		<input type="hidden" name="id" value="${article.id }" />
 			<div>
 				<table class="table">
-					<tr>
-						<th>번호</th>
-						<td>${article.id }</td>
-					</tr>
 					<tr>
 						<th>제목</th>
 						<td><input name="title" type="text" placeholder="Type here" value="${article.title }" class="input input-bordered w-full max-w-xs" /></td>
@@ -58,7 +53,7 @@
 			</div>
 	
 			<div>
-				<button class="btn btn-priamry">확인</button>
+				<button class="btn btn-priamry">작성</button>
 				<button type="button" class="btn" onclick="history.back()">Back</button>
 			</div>
 		</form>

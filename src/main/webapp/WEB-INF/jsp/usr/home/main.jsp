@@ -43,6 +43,6 @@
 			</div>
 		</div>
 	</c:if>
-	
 </div>
+
 <%@ include file="../common/footer.jsp"%>

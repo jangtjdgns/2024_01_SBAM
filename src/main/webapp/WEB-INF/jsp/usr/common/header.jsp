@@ -49,12 +49,12 @@
 	    </c:if>
 	    
 	    <c:if test="${rq.loginedMemberId != 0 }">
-		    <div class="avatar placeholder pl-2.5">
+		    <div class="avatar placeholder">
 				<div class="bg-neutral rounded-full self-center text-white w-8 h-8">
-				<span class="text-xs">${rq.getNickName() }</span>
-			</div>
-	    	<a href="../member/doLogout" class="btn btn-ghost">LOGOUT</a>
-		</div> 
+					<span class="text-xs">${rq.getNickName() }</span>
+				</div>
+	    		<a href="../member/doLogout" class="btn btn-ghost">LOGOUT</a>
+			</div> 
 	    </c:if>
 
 	    <!-- <a class="tooltip" data-tip="Home">
