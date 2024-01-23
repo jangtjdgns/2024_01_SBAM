@@ -10,8 +10,9 @@
 	<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
 		<ul>
 			<li><a href="/">Home</a></li> 
-			<li><a href="/usr/article/list">List</a></li>
-			<li><a href="detail?id=${article.id }">${article.id }번</a></li>
+			<li><a href="list">List</a></li>
+			<li><a href="list?boardId=${board.id }">${board.name }</a></li>
+			<li>${article.id }번</li>
 		</ul>
 	</div>
 

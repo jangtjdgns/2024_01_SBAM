@@ -53,15 +53,22 @@ public interface ArticleDao {
 	public void modifyArticle(int id, String title, String body);
 
 	@Select("""
-			SELECT A.*, M.nickname AS writerName
-				FROM article as A
-				INNER JOIN `member` AS M
-				ON A.memberId = M.id
+			<script>
+			SELECT A.*, M.nickname writerName, B.name listName
+				FROM article A
+				INNER JOIN `member` M
+			    ON A.memberId = M.id
+				INNER JOIN board B
+			    ON A.boardId = B.id
 				WHERE A.title LIKE CONCAT('%', #{searchKeyword}, '%')
+				<if test="boardId != 0">
+					AND B.id = #{boardId}
+				</if>
 				ORDER BY a.id DESC
 				Limit #{limitFrom}, #{itemsInAPage}
+			</script>
 			""")
-	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword);
+	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword, int boardId);
 
 	@Select("""
 			SELECT LAST_INSERT_ID();

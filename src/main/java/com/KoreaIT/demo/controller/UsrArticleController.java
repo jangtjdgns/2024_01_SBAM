@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.demo.service.ArticleService;
+import com.KoreaIT.demo.service.BoardService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Article;
+import com.KoreaIT.demo.vo.Board;
 import com.KoreaIT.demo.vo.Rq;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +20,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UsrArticleController {
 
 	private ArticleService articleService;
+	private BoardService boardService;
 
-	public UsrArticleController(ArticleService articleService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService) {
 		this.articleService = articleService;
+		this.boardService = boardService;
 	}
 
 	@RequestMapping("/usr/article/write")
@@ -52,7 +56,7 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, Integer page, Integer itemsInAPage, String searchKeyword) {
+	public String showList(Model model, Integer page, Integer itemsInAPage, String searchKeyword, Integer boardId) {
 		
 		// 현재 페이지가 0 이하 일 경우 1로 초기화
 		if(page == null || page <= 0) {
@@ -64,7 +68,14 @@ public class UsrArticleController {
 			searchKeyword = "";
 		}
 		searchKeyword = searchKeyword.trim();
-	
+		
+		// boardId
+		if (boardId == null) {
+			boardId = 0;
+		}
+		
+		Board board = boardService.getBoardById(boardId);
+			
 		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
 		if(itemsInAPage == null) {
 			itemsInAPage = 10;
@@ -86,9 +97,10 @@ public class UsrArticleController {
 		int end = ((page - 1) / 10 + 1) * 10;
 		end = end > totalPageCnt ? totalPageCnt : end;
 		
-		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage, searchKeyword);
-	
+		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage, searchKeyword, boardId);
+		
 		model.addAttribute("articles", articles);
+		model.addAttribute("board", board);
 		model.addAttribute("totalPageCnt", totalPageCnt);
 		model.addAttribute("page", page);
 		model.addAttribute("from", from);
@@ -101,11 +113,14 @@ public class UsrArticleController {
 
 	// detail, 상세보기
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpServletRequest req, Model model, int id) {
+	public String showDetail(Model model, int boardId, int id) {
+		
+		Board board = boardService.getBoardById(boardId);
 		
 		Article article = articleService.forPrintArticle(id);
 		
 		model.addAttribute("article", article);
+		model.addAttribute("board", board);
 		
 		return "usr/article/detail";
 	}

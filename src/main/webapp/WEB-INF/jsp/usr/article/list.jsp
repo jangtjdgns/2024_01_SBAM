@@ -7,11 +7,13 @@
 <%@ include file="../common/header.jsp" %>
 	<section class="h-body py-5">
 		<!-- 검색 -->
-		<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
+		<div class="breadcrumbs max-w-5xl mx-auto h-20 text-sm px-2 flex flex-row justify-between items-end">
 			<ul>
 				<li><a href="/">Home</a></li> 
-				<li><a href="/usr/article/list">List</a></li>
+				<li><a href="list">List</a></li>
+				<li>${board == null ? 'All' : board.name }</li>
 			</ul>
+			
 			<form action="list" method="get">
 				<div class="flex justify-around items-center max-w-md h-9">
 					<select class="select select-bordered min-h-0 h-9" name="itemsInAPage">
@@ -25,6 +27,12 @@
 				
 				</div>
 			</form>
+		</div>
+		
+		<div role="tablist" class="tabs tabs-bordered h-10 max-w-5xl mx-auto">
+			<a href="list" role="tab" class="tab <c:if test="${board == null }">tab-active</c:if>">All</a>
+			<a href="list?boardId=1" role="tab" class="tab <c:if test="${board.id == 1 }">tab-active</c:if>">Notice</a>
+			<a href="list?boardId=2" role="tab" class="tab <c:if test="${board.id == 2 }">tab-active</c:if>">Free</a>
 		</div>
 		
 		<!-- 게시물 -->
@@ -51,7 +59,7 @@
 					<c:forEach var="article" items="${articles }">
 						<tr>
 							<td>${article.id }</td>
-							<td class="hover:underline"><a href="detail?id=${article.id}">${article.title }</a></td>
+							<td class="hover:underline"><a href="detail?boardId=${board.id }&id=${article.id }">${article.title }</a></td>
 							<td>${article.writerName }</td>
 							<td class="text-center">${article.regDate.substring(2, 16) }</td>
 							<td>0</td>
