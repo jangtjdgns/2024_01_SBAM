@@ -29,13 +29,14 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/write")
 	public String write() {
+		
 		return "usr/article/write";
 	}
 	
 	// write, 작성
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body, int boardId) {
 		
 		Rq rq = (Rq) req.getAttribute("rq");
 		
@@ -47,11 +48,11 @@ public class UsrArticleController {
 			return Util.jsHistoryBack("내용을 입력해주세요.");
 		}
 		
-		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
+		articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId);
 
 		int id = articleService.getLastInsertId();
 
-		return Util.jsReplace(Util.f("%d번 게시물이 작성되었습니다.", id), Util.f("detail?id=%s", id));
+		return Util.jsReplace(Util.f("%d번 게시물이 작성되었습니다.", id), Util.f("detail?boardId=0&id=%s", id));
 	}
 
 	// list, 목록
@@ -73,8 +74,9 @@ public class UsrArticleController {
 		if (boardId == null) {
 			boardId = 0;
 		}
-		
+				
 		Board board = boardService.getBoardById(boardId);
+		board = board != null ? board : new Board(0, "", "", "all", "All");
 			
 		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
 		if(itemsInAPage == null) {
@@ -85,7 +87,7 @@ public class UsrArticleController {
 		int limitFrom = (page - 1) * itemsInAPage;
 		
 		// 게시물의 전체 수
-		int totalCount = articleService.getTotalCount(searchKeyword);
+		int totalCount = articleService.getTotalCount(searchKeyword, boardId);
 		
 		// 전체 페이지 수
 		int totalPageCnt = (int) Math.ceil((double) totalCount / itemsInAPage);
@@ -165,7 +167,7 @@ public class UsrArticleController {
 
 		articleService.modifyArticle(id, title, body);
 
-		return Util.jsReplace(Util.f("%d번 게시물이 수정되었습니다.", id), Util.f("detail?id=%s", id));
+		return Util.jsReplace(Util.f("%d번 게시물이 수정되었습니다.", id), Util.f("detail?boardId=0&id=%s", id));
 	}
 
 	// delete, 삭제

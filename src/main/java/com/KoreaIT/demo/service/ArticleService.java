@@ -16,8 +16,8 @@ public class ArticleService {
 		this.articleDao = articleDao;
 	}
 
-	public void writeArticle(int loginedMemberId, String title, String body) {
-		articleDao.writeArticle(loginedMemberId, title, body);
+	public void writeArticle(int loginedMemberId, String title, String body, int boardId) {
+		articleDao.writeArticle(loginedMemberId, title, body, boardId);
 	}
 
 	public Article getArticleById(int id) {
@@ -44,7 +44,7 @@ public class ArticleService {
 		return articleDao.forPrintArticle(id);
 	}
 
-	public int getTotalCount(String searchKeyword) {
-		return articleDao.getTotalCount(searchKeyword);
+	public int getTotalCount(String searchKeyword, int boardId) {
+		return articleDao.getTotalCount(searchKeyword, boardId);
 	}
 }

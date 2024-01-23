@@ -42,12 +42,22 @@
 			<div>
 				<table class="table">
 					<tr>
+						<th>게시판</th>
+						<td>
+							<select class="select select-bordered w-36 min-h-0 h-9" name="boardId">
+								<!-- 공지는 어드민만 가능하도록 변경예정, 임시로 memberId가 1인경우에만 가능 -->
+								<c:if test="${rq.loginedMemberId == 1 }"><option value="1" selected>공지</option></c:if>
+								<option value="2">자유게시판</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<th>제목</th>
-						<td><input name="title" type="text" placeholder="Type here" value="${article.title }" class="input input-bordered w-full max-w-xs" /></td>
+						<td><input name="title" type="text" placeholder="제목을 입력하세요." class="input input-bordered w-full max-w-xs" /></td>
 					</tr>
 					<tr>
 						<th>내용</th>
-						<td><textarea name="body" placeholder="내용을 입력하세요." class="textarea textarea-bordered textarea-md w-full max-w-xs">${article.body }</textarea></td>
+						<td><textarea name="body" placeholder="내용을 입력하세요." class="textarea textarea-bordered textarea-md w-full max-w-xs"></textarea></td>
 					</tr>
 				</table>
 			</div>

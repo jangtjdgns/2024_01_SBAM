@@ -18,10 +18,11 @@ public interface ArticleDao {
 				SET regDate = NOW()
 					, updateDate = NOW()
 					, memberId = #{loginedMemberId}
+					, boardId = #{boardId }
 					, title = #{title}
 					, `body` = #{body}
 			""")
-	public void writeArticle(int loginedMemberId, String title, String body);
+	public void writeArticle(int loginedMemberId, String title, String body, int boardId);
 	
 	@Select(""" 
 			SELECT *
@@ -54,7 +55,7 @@ public interface ArticleDao {
 
 	@Select("""
 			<script>
-			SELECT A.*, M.nickname writerName, B.name listName
+			SELECT A.*, M.nickname writerName
 				FROM article A
 				INNER JOIN `member` M
 			    ON A.memberId = M.id
@@ -85,9 +86,16 @@ public interface ArticleDao {
 	public Article forPrintArticle(int id);
 
 	@Select("""
-			SELECT COUNT(*)
+			<script>
+				SELECT COUNT(*)
 				FROM article
 				WHERE title LIKE CONCAT('%', #{searchKeyword} ,'%')
+				<if test="boardId != 0">
+					AND boardId = #{boardId}
+				</if>
+			</script>
+			
+				
 			""")
-	public int getTotalCount(String searchKeyword);
+	public int getTotalCount(String searchKeyword, int boardId);
 }

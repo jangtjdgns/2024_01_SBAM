@@ -11,7 +11,8 @@
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
-			<li><a href="list?boardId=${board.id }">${board.name }</a></li>
+			
+			<li><a href="list?boardId=${board == null ? 0 : board.id }">${board == null ? 'All' : board.name }</a></li>
 			<li>${article.id }번</li>
 		</ul>
 	</div>
@@ -43,8 +44,7 @@
 		</div>
 	
 		<div>
-			<a href="list" class="btn">Back</a>
-			
+			<a href="list?boardId=${board == null ? 0 : board.id }" class="btn">Back</a>
 			<c:if test="${loginedMemberId == article.memberId }">
 				<a href="modify?id=${article.id }" class="btn">수정</a>
 				<a href="doDelete?id=${article.id }" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>

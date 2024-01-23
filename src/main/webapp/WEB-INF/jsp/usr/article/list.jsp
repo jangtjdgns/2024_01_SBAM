@@ -15,6 +15,7 @@
 			</ul>
 			
 			<form action="list" method="get">
+				<input type="hidden" value="${board == null ? 0 : board.id }" name="boardId" />
 				<div class="flex justify-around items-center max-w-md h-9">
 					<select class="select select-bordered min-h-0 h-9" name="itemsInAPage">
 						<c:forEach begin="${10 }" end="${50 }" step="5" var="i">
@@ -24,13 +25,12 @@
 				
 					<input type="text" name="searchKeyword" placeholder="Search here" class="input input-bordered w-3/5 h-9" value="${searchKeyword }" />
 					<button><i class="fa-solid fa-magnifying-glass text-2xl"></i></button>
-				
 				</div>
 			</form>
 		</div>
 		
 		<div role="tablist" class="tabs tabs-bordered h-10 max-w-5xl mx-auto">
-			<a href="list" role="tab" class="tab <c:if test="${board == null }">tab-active</c:if>">All</a>
+			<a href="list" role="tab" class="tab <c:if test="${board.id == 0 }">tab-active</c:if>">All</a>
 			<a href="list?boardId=1" role="tab" class="tab <c:if test="${board.id == 1 }">tab-active</c:if>">Notice</a>
 			<a href="list?boardId=2" role="tab" class="tab <c:if test="${board.id == 2 }">tab-active</c:if>">Free</a>
 		</div>
@@ -59,7 +59,7 @@
 					<c:forEach var="article" items="${articles }">
 						<tr>
 							<td>${article.id }</td>
-							<td class="hover:underline"><a href="detail?boardId=${board.id }&id=${article.id }">${article.title }</a></td>
+							<td class="hover:underline"><a href="detail?boardId=${board.id}&id=${article.id }">${article.title }</a></td>
 							<td>${article.writerName }</td>
 							<td class="text-center">${article.regDate.substring(2, 16) }</td>
 							<td>0</td>
@@ -71,26 +71,27 @@
 		</div>
 		
 		<!-- 페이징버튼 -->
-		<div class="w-1/5 pt-7 max-w-5xl mx-auto flex">
-			<div></div>
-			<div class="join w-3/5">
+		<div class="pt-7 max-w-5xl mx-auto flex">
+			<div class="w-1/5"></div>
+			<div class="join w-3/5 justify-center">
 				<c:if test="${from ne 1 }">
-					<a href="list?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">«</a>
-					<a href="list?page=${from - 1}&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">&lt;</a>
+				
+					<a href="list?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">«</a>
+					<a href="list?page=${from - 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board == null ? 0 : board.id }" class="join-item btn btn-sm">&lt;</a>
 				</c:if>
 				
 				<c:forEach begin="${from }" end="${end }" step="1" var="i">
-					<a href="list?page=${i }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
+					<a href="list?page=${i }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="<c:if test="${end ne 1 }">join-item</c:if> btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
 				</c:forEach>
 				
 				<c:if test="${end ne totalPageCnt}">
-					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">&gt;</a>
-					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }" class="join-item btn btn-sm">»</a>
+					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">&gt;</a>
+					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">»</a>
 				</c:if>
 			</div>
 			
 			<c:if test="${rq.loginedMemberId != 0}">
-				<div class="w-1/5">
+				<div class="w-1/5 text-right">
 					<a href="write" class="btn btn-sm">글작성</a>
 				</div>
 			</c:if>
