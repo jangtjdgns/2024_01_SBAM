@@ -8,41 +8,20 @@
 
 <div class="hero h-body bg-base-200 flex justify-around">
 	<div class="hero-content text-center">
-		<div class="content-box cb-1 max-w-md">
-			<h1 class="text-5xl font-bold">LIST</h1>
-			<p class="py-6">Lorem ipsum dolor sit amet, consectetur
-				adipisicing elit. Sunt dolores illum alias labore error pariatur
-				laudantium natus fuga mollitia quis quidem ut quae ea magnam
-				recusandae dolorum harum dolore architecto.</p>
-			<a href="../article/list" class="btn btn-primary">Get Started</a>
+		<div class="content-box cb-1 w-96">
+			<h1 class="text-5xl font-bold">NOTICE</h1>
+			<p class="py-6">공지사항</p>
+			<a href="../article/list?boardId=1" class="btn btn-primary">Get Started</a>
 		</div>
 	</div>
 	
-	<c:if test="${rq.loginedMemberId == 0}">
-		<div class="hero-content text-center">
-			<div class="content-box cb-2 max-w-md">
-				<h1 class="text-5xl font-bold">LOGIN</h1>
-				<p class="py-6">Lorem ipsum dolor sit amet, consectetur
-					adipisicing elit. Sunt dolores illum alias labore error pariatur
-					laudantium natus fuga mollitia quis quidem ut quae ea magnam
-					recusandae dolorum harum dolore architecto.</p>
-				<a href="../member/login" class="btn btn-primary">LOGIN</a>
-			</div>
+	<div class="hero-content text-center">
+		<div class="content-box cb-2 w-96">
+			<h1 class="text-5xl font-bold">FREE</h1>
+			<p class="py-6">자유게시판</p>
+			<a href="../article/list?boardId=2" class="btn btn-primary">바로가기</a>
 		</div>
-	</c:if>
-	
-	<c:if test="${rq.loginedMemberId != 0}">
-		<div class="hero-content text-center">
-			<div class="content-box cb-2 max-w-md">
-				<h1 class="text-5xl font-bold">LOGOUT</h1>
-				<p class="py-6">Lorem ipsum dolor sit amet, consectetur
-					adipisicing elit. Sunt dolores illum alias labore error pariatur
-					laudantium natus fuga mollitia quis quidem ut quae ea magnam
-					recusandae dolorum harum dolore architecto.</p>
-				<a href="../member/doLogout" class="btn btn-primary">LOGOUT</a>
-			</div>
-		</div>
-	</c:if>
+	</div>
 </div>
 
 <%@ include file="../common/footer.jsp"%>

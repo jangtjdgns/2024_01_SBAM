@@ -94,8 +94,6 @@ public interface ArticleDao {
 					AND boardId = #{boardId}
 				</if>
 			</script>
-			
-				
 			""")
 	public int getTotalCount(String searchKeyword, int boardId);
 }

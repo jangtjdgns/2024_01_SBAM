@@ -55,17 +55,10 @@ public class Rq {
 	// 세션 로그인
 	public void login(Member member) {
 		this.session.setAttribute("loginedMemberId", member.getId());
-		this.session.setAttribute("nickname", member.getNickname());
 	}
 	
 	// 세션 로그아웃
 	public void logout() {
 		this.session.removeAttribute("loginedMemberId");
-		this.session.removeAttribute("nickname");
-	}
-	
-	// 닉네임 get
-	public String getNickName() {
-		return (String) this.session.getAttribute("nickname");
 	}
 }
