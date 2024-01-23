@@ -11,7 +11,7 @@
 			<ul>
 				<li><a href="/">Home</a></li> 
 				<li><a href="list">List</a></li>
-				<li>${board == null ? 'All' : board.name }</li>
+				<li>${board.name } (${articlesCnt })</li>
 			</ul>
 			
 			<form action="list" method="get">
@@ -30,9 +30,9 @@
 		</div>
 		
 		<div role="tablist" class="tabs tabs-bordered h-10 max-w-5xl mx-auto">
-			<a href="list" role="tab" class="tab <c:if test="${board.id == 0 }">tab-active</c:if>">All</a>
-			<a href="list?boardId=1" role="tab" class="tab <c:if test="${board.id == 1 }">tab-active</c:if>">Notice</a>
-			<a href="list?boardId=2" role="tab" class="tab <c:if test="${board.id == 2 }">tab-active</c:if>">Free</a>
+			<a href="list" role="tab" class="tab ${board.id == 0 ? 'tab-active ': ''}">All</a>
+			<a href="list?boardId=1" role="tab" class="tab ${board.id == 1 ? 'tab-active ': ''}">Notice</a>
+			<a href="list?boardId=2" role="tab" class="tab ${board.id == 2 ? 'tab-active ': ''}">Free</a>
 		</div>
 		
 		<!-- 게시물 -->

@@ -11,8 +11,7 @@
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
-			
-			<li><a href="list?boardId=${board == null ? 0 : board.id }">${board == null ? 'All' : board.name }</a></li>
+			<li><a href="list?boardId=${board.id }">${board.name }</a></li>
 			<li>${article.id }번</li>
 		</ul>
 	</div>

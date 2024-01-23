@@ -76,7 +76,6 @@ public class UsrArticleController {
 		}
 				
 		Board board = boardService.getBoardById(boardId);
-		board = board != null ? board : new Board(0, "", "", "all", "All");
 			
 		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
 		if(itemsInAPage == null) {
@@ -87,10 +86,10 @@ public class UsrArticleController {
 		int limitFrom = (page - 1) * itemsInAPage;
 		
 		// 게시물의 전체 수
-		int totalCount = articleService.getTotalCount(searchKeyword, boardId);
+		int articlesCnt = articleService.getTotalCount(searchKeyword, boardId);
 		
 		// 전체 페이지 수
-		int totalPageCnt = (int) Math.ceil((double) totalCount / itemsInAPage);
+		int totalPageCnt = (int) Math.ceil((double) articlesCnt / itemsInAPage);
 		
 		// 페이징 버튼 시작
 		int from = ((page - 1) / 10) * 10 + 1;
@@ -103,6 +102,7 @@ public class UsrArticleController {
 		
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
+		model.addAttribute("articlesCnt", articlesCnt);
 		model.addAttribute("totalPageCnt", totalPageCnt);
 		model.addAttribute("page", page);
 		model.addAttribute("from", from);

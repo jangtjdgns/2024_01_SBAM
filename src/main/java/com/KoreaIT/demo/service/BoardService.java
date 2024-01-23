@@ -14,6 +14,11 @@ public class BoardService {
 	}
 
 	public Board getBoardById(int boardId) {
+		
+		if(boardId == 0) {
+			return new Board(0, "", "", "all", "All");
+		}
+		
 		return boardDao.getBoardById(boardId);
 	}
 }
