@@ -74,19 +74,18 @@
 		<div class="pt-7 max-w-5xl mx-auto flex">
 			<div class="w-1/5"></div>
 			<div class="join w-3/5 justify-center">
-				<c:if test="${from ne 1 }">
-				
-					<a href="list?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">«</a>
-					<a href="list?page=${from - 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board == null ? 0 : board.id }" class="join-item btn btn-sm">&lt;</a>
+				<c:if test="${from != 1 }">
+					<a href="?page=1&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">«</a>
+					<a href="?page=${from - 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board == null ? 0 : board.id }" class="join-item btn btn-sm">&lt;</a>
 				</c:if>
 				
 				<c:forEach begin="${from }" end="${end }" step="1" var="i">
-					<a href="list?page=${i }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="<c:if test="${end ne 1 }">join-item</c:if> btn btn-sm <c:if test="${page eq i }">btn-active</c:if>">${i }</a>
+					<a href="?page=${i }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class = "${end != 1 ? 'join-item' : ''} btn btn-sm ${page == i ? 'btn-active' : '' }">${i }</a>
 				</c:forEach>
 				
-				<c:if test="${end ne totalPageCnt}">
-					<a href="list?page=${end + 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">&gt;</a>
-					<a href="list?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">»</a>
+				<c:if test="${end != totalPageCnt }">
+					<a href="?page=${end + 1 }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">&gt;</a>
+					<a href="?page=${totalPageCnt }&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }" class="join-item btn btn-sm">»</a>
 				</c:if>
 			</div>
 			

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.demo.service.ArticleService;
@@ -55,30 +56,16 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, Integer page, Integer itemsInAPage, String searchKeyword, Integer boardId) {
+	public String showList(Model model,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int itemsInAPage,
+			@RequestParam(defaultValue = "") String searchKeyword, @RequestParam(defaultValue = "0") int boardId) {
 		
-		// 현재 페이지가 0 이하 일 경우 1로 초기화
-		if(page == null || page <= 0) {
-			page = 1;
-		}
-		
-		// 검색어
-		if(searchKeyword == null) {
-			searchKeyword = "";
-		}
-		searchKeyword = searchKeyword.trim();
-		
-		// boardId
-		if (boardId == null) {
-			boardId = 0;
+		// 페이지 번호가 0이하일 때
+		if (page <= 0){
+			return rq.jsReturnOnView("페이지 번호가 올바르지 않습니다.");
 		}
 				
 		Board board = boardService.getBoardById(boardId);
-		
-		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
-		if(itemsInAPage == null) {
-			itemsInAPage = 10;
-		}
 		
 		// DB limit 시작 부분
 		int limitFrom = (page - 1) * itemsInAPage;
