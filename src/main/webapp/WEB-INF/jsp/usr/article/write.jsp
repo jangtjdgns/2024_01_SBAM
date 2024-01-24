@@ -44,11 +44,23 @@
 					<tr>
 						<th>게시판</th>
 						<td>
-							<select class="select select-bordered w-36 min-h-0 h-9" name="boardId">
+							<div class="flex">
+								<!-- 라디오 사용 -->
+								<label class="flex items-center">
+									<input type="radio" name="boardId" class="radio" value="1" checked />
+									공지사항
+								</label>
+								<div class="w-20"></div>
+								<label class="flex items-center">
+									<input type="radio" name="boardId" class="radio" value="2" />
+									자유
+								</label>
+							</div>
+							<%-- <select class="select select-bordered w-36 min-h-0 h-9" name="boardId">
 								<!-- 공지는 어드민만 가능하도록 변경예정, 임시로 memberId가 1인경우에만 가능 -->
-								<c:if test="${rq.loginedMemberId == 1 }"><option value="1" selected>공지</option></c:if>
+								<c:if test="${rq.loginedMemberId == 1 }"><option value="1" selected>공지사항</option></c:if>
 								<option value="2">자유게시판</option>
-							</select>
+							</select> --%>
 						</td>
 					</tr>
 					<tr>
