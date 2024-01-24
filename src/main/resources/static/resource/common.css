@@ -30,7 +30,6 @@ html>body .content-box {
 	animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
-
 html>body .cb-2 {
 	animation-delay: .05s;
 }
@@ -49,4 +48,9 @@ html>body .cb-3 {
 		-webkit-transform: translateY(-50px);
 		transform: translateY(-50px);
 	}
+}
+
+/* main step */
+.step {
+	cursor: pointer;
 }
