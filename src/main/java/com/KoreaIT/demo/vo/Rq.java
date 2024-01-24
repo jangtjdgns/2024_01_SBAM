@@ -2,6 +2,10 @@ package com.KoreaIT.demo.vo;
 
 import java.io.IOException;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+
 import com.KoreaIT.demo.util.Util;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 
+@Component
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)		// http 요청이 들어올때마다 새로만들어낸다, 이미있는 경우 이어서 사용한다.
 public class Rq {
 	
 	@Getter
@@ -32,6 +38,8 @@ public class Rq {
 		}
 		
 		this.loginedMemberId = loginedMemberId;
+		
+		this.req.setAttribute("rq", this);	// 객체를 자동으로 생성하게 했으므로 값으로 들어가야하는 곳에는 객체 자신인 this를 넣어줌
 	}
 
 	// Interceptor에서 사용, controller 까지 넘어갈 필요가 없을 때
@@ -61,4 +69,9 @@ public class Rq {
 	public void logout() {
 		this.session.removeAttribute("loginedMemberId");
 	}
+
+	// 객체를 완성하기 위한 메서드
+	public void init() {
+		
+	};
 }

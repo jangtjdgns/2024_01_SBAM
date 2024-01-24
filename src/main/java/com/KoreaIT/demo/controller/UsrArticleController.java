@@ -14,17 +14,17 @@ import com.KoreaIT.demo.vo.Article;
 import com.KoreaIT.demo.vo.Board;
 import com.KoreaIT.demo.vo.Rq;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 @Controller
 public class UsrArticleController {
 
 	private ArticleService articleService;
 	private BoardService boardService;
+	private Rq rq;
 
-	public UsrArticleController(ArticleService articleService, BoardService boardService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService, Rq rq) {
 		this.articleService = articleService;
 		this.boardService = boardService;
+		this.rq = rq;
 	}
 
 	@RequestMapping("/usr/article/write")
@@ -36,9 +36,7 @@ public class UsrArticleController {
 	// write, 작성
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, String title, String body, int boardId) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doWrite(String title, String body, int boardId) {
 		
 		if (Util.empty(title)) {
 			return Util.jsHistoryBack("제목을 입력해주세요.");
@@ -76,7 +74,7 @@ public class UsrArticleController {
 		}
 				
 		Board board = boardService.getBoardById(boardId);
-			
+		
 		// 한 페이지에 표시될 게시물의 수 itemsInAPage null
 		if(itemsInAPage == null) {
 			itemsInAPage = 10;
@@ -115,11 +113,17 @@ public class UsrArticleController {
 
 	// detail, 상세보기
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int boardId, int id) {
+	public String showDetail(Model model, int id, int boardId) {
+		
+		Article article = articleService.forPrintArticle(id);
+		
+		if (article == null) {
+			return rq.jsReturnOnView(Util.f("%d번 게시물은 존재하지 않습니다", id));
+		}
 		
 		Board board = boardService.getBoardById(boardId);
 		
-		Article article = articleService.forPrintArticle(id);
+		
 		
 		model.addAttribute("article", article);
 		model.addAttribute("board", board);
@@ -129,9 +133,7 @@ public class UsrArticleController {
 
 	// modify, 수정 페이지
 	@RequestMapping("/usr/article/modify")
-	public String modify(HttpServletRequest req, Model model, int id) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String modify(Model model, int id) {
 		
 		Article article = articleService.forPrintArticle(id);
 
@@ -151,9 +153,7 @@ public class UsrArticleController {
 	// doModify, 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, int id, String title, String body) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doModify(int id, String title, String body) {
 		
 		Article article = articleService.getArticleById(id);
 
@@ -173,9 +173,7 @@ public class UsrArticleController {
 	// delete, 삭제
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(HttpServletRequest req, int id) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doDelete(int id) {
 		
 		Article article = articleService.getArticleById(id);
 

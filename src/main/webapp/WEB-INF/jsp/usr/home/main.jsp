@@ -13,8 +13,8 @@
 			$("body").css('overflow-y', 'hidden');
 		}
 		
-		let page = 1;					// 현재 페이지
-		let lastPage = 4; 				// 페이지 수, 높이가 300vh이므로 3, + footer 높이 178px 1
+		let page = 1;					// 현재 페이지 번호
+		let lastPage = 4; 				// 마지막 페이지 번호, 높이가 300vh이므로 3, + footer 높이 178px 1
 		let posTop = 0;					// 페이지의 상단 위치, footer 높이 고려
 		
 		// 시작 시 맨위로
@@ -22,7 +22,7 @@
 			scrollTop : 0
 		}, 700);
 
-		// 스탭 스타일 지정, 애니메이션 함수
+		// 스탭 스타일 지정, 화면 이동 애니메이션
 		function setStepStyle(){
 			posTop = page == 4 ? 2 * $(window).height() + 178 : (page - 1) * $(window).height();
 			
