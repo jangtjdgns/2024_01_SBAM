@@ -43,7 +43,8 @@
 		</div>
 	
 		<div>
-			<a href="list?boardId=${board == null ? 0 : board.id }" class="btn">Back</a>
+			<a href="list?boardId=${board.id }" class="btn">List</a>
+			<button class="btn" onclick="history.back()">Back</button>
 			<c:if test="${loginedMemberId == article.memberId }">
 				<a href="modify?id=${article.id }" class="btn">수정</a>
 				<a href="doDelete?id=${article.id }" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>

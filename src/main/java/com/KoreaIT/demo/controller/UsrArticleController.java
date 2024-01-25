@@ -56,9 +56,10 @@ public class UsrArticleController {
 
 	// list, 목록
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int itemsInAPage,
-			@RequestParam(defaultValue = "") String searchKeyword, @RequestParam(defaultValue = "0") int boardId) {
+	public String showList(Model model
+			, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int itemsInAPage
+			, @RequestParam(defaultValue = "") String searchKeyword, @RequestParam(defaultValue = "0") int boardId
+			, @RequestParam(defaultValue = "1") int searchType) {
 		
 		// 페이지 번호가 0이하일 때
 		if (page <= 0){
@@ -71,7 +72,7 @@ public class UsrArticleController {
 		int limitFrom = (page - 1) * itemsInAPage;
 		
 		// 게시물의 전체 수
-		int articlesCnt = articleService.getTotalCount(searchKeyword, boardId);
+		int articlesCnt = articleService.getTotalCount(searchKeyword, boardId, searchType);
 		
 		// 전체 페이지 수
 		int totalPageCnt = (int) Math.ceil((double) articlesCnt / itemsInAPage);
@@ -83,7 +84,7 @@ public class UsrArticleController {
 		int end = ((page - 1) / 10 + 1) * 10;
 		end = end > totalPageCnt ? totalPageCnt : end;
 		
-		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage, searchKeyword, boardId);
+		List<Article> articles = articleService.getArticles(limitFrom, itemsInAPage, searchKeyword, boardId, searchType);
 		
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
@@ -93,6 +94,7 @@ public class UsrArticleController {
 		model.addAttribute("from", from);
 		model.addAttribute("end", end);
 		model.addAttribute("itemsInAPage", itemsInAPage);
+		model.addAttribute("searchType", searchType);
 		model.addAttribute("searchKeyword", searchKeyword);
 		
 		return "usr/article/list";

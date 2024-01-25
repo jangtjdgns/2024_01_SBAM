@@ -32,8 +32,8 @@ public class ArticleService {
 		articleDao.modifyArticle(id, title, body);
 	}
 
-	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword, int boardId) {
-		return articleDao.getArticles(limitFrom, itemsInAPage, searchKeyword, boardId);
+	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword, int boardId, int searchType) {
+		return articleDao.getArticles(limitFrom, itemsInAPage, searchKeyword, boardId, searchType);
 	}
 
 	public int getLastInsertId() {
@@ -44,7 +44,7 @@ public class ArticleService {
 		return articleDao.forPrintArticle(id);
 	}
 
-	public int getTotalCount(String searchKeyword, int boardId) {
-		return articleDao.getTotalCount(searchKeyword, boardId);
+	public int getTotalCount(String searchKeyword, int boardId, int searchType) {
+		return articleDao.getTotalCount(searchKeyword, boardId, searchType);
 	}
 }

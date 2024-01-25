@@ -61,15 +61,28 @@ public interface ArticleDao {
 			    ON A.memberId = M.id
 				INNER JOIN board B
 			    ON A.boardId = B.id
-				WHERE A.title LIKE CONCAT('%', #{searchKeyword}, '%')
-				<if test="boardId != 0">
-					AND B.id = #{boardId}
+				WHERE 1 = 1
+				<if test="searchKeyword != ''">
+					<choose>
+						<when test="searchType == 1">
+							AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<when test="searchType == 2">
+							AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<otherwise>
+							AND (
+								A.title LIKE CONCAT('%', #{searchKeyword}, '%')
+								OR A.body LIKE CONCAT('%', #{searchKeyword}, '%')
+							)
+						</otherwise>
+					</choose>
 				</if>
-				ORDER BY a.id DESC
+				ORDER BY A.id DESC
 				Limit #{limitFrom}, #{itemsInAPage}
 			</script>
 			""")
-	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword, int boardId);
+	public List<Article> getArticles(int limitFrom, int itemsInAPage, String searchKeyword, int boardId, int searchType);
 
 	@Select("""
 			SELECT LAST_INSERT_ID();
@@ -89,11 +102,27 @@ public interface ArticleDao {
 			<script>
 				SELECT COUNT(*)
 				FROM article
-				WHERE title LIKE CONCAT('%', #{searchKeyword} ,'%')
+				WHERE 1 = 1
 				<if test="boardId != 0">
 					AND boardId = #{boardId}
 				</if>
+				<if test="searchKeyword != ''">
+					<choose>
+						<when test="searchType == 1">
+							AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<when test="searchType == 2">
+							AND `body` LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<otherwise>
+							AND (
+								title LIKE CONCAT('%', #{searchKeyword}, '%')
+								OR `body` LIKE CONCAT('%', #{searchKeyword}, '%')
+							)
+						</otherwise>
+					</choose>
+				</if>
 			</script>
 			""")
-	public int getTotalCount(String searchKeyword, int boardId);
+	public int getTotalCount(String searchKeyword, int boardId, int searchType);
 }
