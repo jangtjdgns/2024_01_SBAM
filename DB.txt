@@ -39,6 +39,9 @@ title = '제목3',
 SELECT * FROM article
 ORDER BY id DESC;
 
+# article 테이블에 조회수 칼럼추가
+ALTER TABLE article ADD COLUMN hit INT UNSIGNED NOT NULL DEFAULT 0
+
 # 두 배씩 출력
 INSERT INTO article(regDate, updateDate, title, `body`)
 SELECT NOW(), NOW(), CONCAT('제목_', RAND()), CONCAT('내용_', RAND())

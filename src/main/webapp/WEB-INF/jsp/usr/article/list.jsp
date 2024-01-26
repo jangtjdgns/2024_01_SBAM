@@ -74,7 +74,7 @@
 							<td>${article.writerName }</td>
 							<td class="text-center">${article.regDate.substring(2, 16) }</td>
 							<td>0</td>
-							<td>0</td>
+							<td>${article.hitCnt }</td>
 						</tr>
 					</c:forEach>
 				</tbody>

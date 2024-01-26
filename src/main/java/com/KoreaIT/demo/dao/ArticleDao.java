@@ -62,6 +62,9 @@ public interface ArticleDao {
 				INNER JOIN board B
 			    ON A.boardId = B.id
 				WHERE 1 = 1
+				<if test="boardId != 0">
+					AND A.boardId = #{boardId}
+				</if>
 				<if test="searchKeyword != ''">
 					<choose>
 						<when test="searchType == 1">
@@ -91,10 +94,10 @@ public interface ArticleDao {
 
 	@Select("""
 			SELECT A.*, M.nickname AS writerName
-				FROM article as A
+				FROM article AS A
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
-				WHERE a.id = #{id}
+				WHERE A.id = #{id}
 			""")
 	public Article forPrintArticle(int id);
 
@@ -125,4 +128,11 @@ public interface ArticleDao {
 			</script>
 			""")
 	public int getTotalCount(String searchKeyword, int boardId, int searchType);
+
+	@Update("""
+			UPDATE article
+				SET hitCnt = hitCnt + 1
+				WHERE id = #{id}
+			""")
+	public void increaseHitCnt(int id);
 }

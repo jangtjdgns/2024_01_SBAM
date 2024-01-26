@@ -16,5 +16,6 @@ public class Article {
 	private String title;
 	private String body;
 	private String writerName;
-	private String boardName; 
+	private String boardName;
+	private int hitCnt;
 }

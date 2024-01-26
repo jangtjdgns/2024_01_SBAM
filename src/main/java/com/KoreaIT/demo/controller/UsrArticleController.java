@@ -104,15 +104,15 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int id, int boardId) {
 		
-		Article article = articleService.forPrintArticle(id);
-		
-		if (article == null) {
+		if (articleService.getArticleById(id) == null) {
 			return rq.jsReturnOnView(Util.f("%d번 게시물은 존재하지 않습니다", id));
 		}
 		
+		articleService.increaseHitCnt(id);
+		
+		Article article = articleService.forPrintArticle(id);
+		
 		Board board = boardService.getBoardById(boardId);
-		
-		
 		
 		model.addAttribute("article", article);
 		model.addAttribute("board", board);
