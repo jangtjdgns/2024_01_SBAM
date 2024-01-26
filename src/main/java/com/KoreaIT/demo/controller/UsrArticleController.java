@@ -15,6 +15,10 @@ import com.KoreaIT.demo.vo.Article;
 import com.KoreaIT.demo.vo.Board;
 import com.KoreaIT.demo.vo.Rq;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 public class UsrArticleController {
 
@@ -102,13 +106,39 @@ public class UsrArticleController {
 
 	// detail, 상세보기
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int id, int boardId) {
+	public String showDetail(HttpServletRequest req, HttpServletResponse res, Model model, int id, int boardId) {
 		
 		if (articleService.getArticleById(id) == null) {
 			return rq.jsReturnOnView(Util.f("%d번 게시물은 존재하지 않습니다", id));
 		}
 		
-		articleService.increaseHitCnt(id);
+		// 쿠키
+		Cookie oldCookie = null;							
+		Cookie[] cookies = req.getCookies();				// 여러개의 쿠키를 사용할 수 있기에 배열로 저장-> 브라우저의 Cookies에 있는 쿠키정보들을 가져옴
+
+		if (cookies != null) {								// 쿠키배열이 null이 아닐때
+			for (Cookie cookie : cookies) {					// 반복
+				if (cookie.getName().equals("hitCnt")) {	// hitCnt란 이름의 쿠키가 있는 경우
+					oldCookie = cookie;						// oldCookie에 저장
+				}
+			}
+		}
+		
+		if(oldCookie != null) {												// oldCookie가 null이 아닐 때 -> hitCnt란 쿠키가 있는 경우
+			if(!oldCookie.getValue().contains("[" + id + "]")) {			// [id] 형태의 문자열이 포함되어 있지 않다면
+				articleService.increaseHitCnt(id);							// 해당 게시물의 hitCnt 조회수 증가
+				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");	// 기존쿠키 + _[id] 형태의 문자열 추가 -> 다른 게시물들을 들어간 경우
+				oldCookie.setPath("/");
+				oldCookie.setMaxAge(10);									// 만료시점, 초 / 24시간(60 * 60 * 24)
+				res.addCookie(oldCookie);									// 쿠키 추가
+			}
+		} else {															// oldCookie가 null일 때
+			articleService.increaseHitCnt(id);								// 해당 게시물의 hitCnt 조회수 증가
+			Cookie newCookie = new Cookie("hitCnt", "[" + id + "]");		// 새로운 쿠키 생성, ("hitCnt", [id])
+			newCookie.setPath("/");
+			newCookie.setMaxAge(10);										// 만료시점, 초
+			res.addCookie(newCookie);										// 쿠키 추가
+		}
 		
 		Article article = articleService.forPrintArticle(id);
 		
