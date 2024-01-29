@@ -92,6 +92,16 @@ nickname = '테스트1',
 cellphoneNum = '010-1111-1111',
 email = 'test1@test.com';
 
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test2',
+loginPw = 'test2',
+`name` = '테스트2',
+nickname = '테스트2',
+cellphoneNum = '010-2222-2222',
+email = 'test2@test.com';
+
 SELECT * FROM `member`;
 
 # LAST_INSERT_ID(), 마지막 id(pk) 를 가져옴
@@ -147,9 +157,9 @@ relId = 2,
 
 # 2번 회원이 3번 게시물에 좋아요
 INSERT INTO recommendPoint
-SET memberId = 3,
+SET memberId = 2,
 relTypeCode = 'article',
-relId = 2,
+relId = 3,
 `point` = 1;
 
 # 3번 회원이 1번 게시물에 좋아요
