@@ -129,14 +129,14 @@ public class UsrArticleController {
 				articleService.increaseHitCnt(id);							// 해당 게시물의 hitCnt 조회수 증가
 				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");	// 기존쿠키 + _[id] 형태의 문자열 추가 -> 다른 게시물들을 들어간 경우
 				oldCookie.setPath("/");
-				oldCookie.setMaxAge(10);									// 만료시점, 초 / 24시간(60 * 60 * 24)
+				oldCookie.setMaxAge(60 * 60);									// 만료시점, 초 / 24시간(60 * 60 * 24)
 				res.addCookie(oldCookie);									// 쿠키 추가
 			}
 		} else {															// oldCookie가 null일 때
 			articleService.increaseHitCnt(id);								// 해당 게시물의 hitCnt 조회수 증가
 			Cookie newCookie = new Cookie("hitCnt", "[" + id + "]");		// 새로운 쿠키 생성, ("hitCnt", [id])
 			newCookie.setPath("/");
-			newCookie.setMaxAge(10);										// 만료시점, 초
+			newCookie.setMaxAge(60 * 60);										// 만료시점, 초
 			res.addCookie(newCookie);										// 쿠키 추가
 		}
 		

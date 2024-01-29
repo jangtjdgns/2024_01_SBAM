@@ -24,20 +24,24 @@
 					<td>${article.id }</td>
 				</tr>
 				<tr>
-					<th>조회수</th>
-					<td>${article.hitCnt }</td>
+					<th>작성일</th>
+					<td>${article.regDate.substring(2, 16) }</td>
 				</tr>
 				<tr>
-					<th>제목</th>
-					<td>${article.title }</td>
+					<th>조회수</th>
+					<td>${article.hitCnt }</td>
 				</tr>
 				<tr>
 					<th>작성자</th>
 					<td>${article.writerName }</td>
 				</tr>
 				<tr>
-					<th>작성일</th>
-					<td>${article.regDate.substring(2, 16) }</td>
+					<th>추천</th>
+					<td>${article.point }</td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td>${article.title }</td>
 				</tr>
 				<tr>
 					<th>내용</th>

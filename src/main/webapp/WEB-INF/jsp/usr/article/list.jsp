@@ -73,7 +73,7 @@
 							<td class="hover:underline"><a href="detail?boardId=${board.id}&id=${article.id }">${article.title }</a></td>
 							<td>${article.writerName }</td>
 							<td class="text-center">${article.regDate.substring(2, 16) }</td>
-							<td>0</td>
+							<td>${article.point }</td>
 							<td>${article.hitCnt }</td>
 						</tr>
 					</c:forEach>

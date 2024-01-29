@@ -56,10 +56,13 @@ public interface ArticleDao {
 	@Select("""
 			<script>
 			SELECT A.*, M.nickname writerName
+				, IFNULL(SUM(R.point), 0) `point`
 				FROM article A
 				INNER JOIN `member` M
 			    ON A.memberId = M.id
-				INNER JOIN board B
+			    LEFT JOIN recommendPoint R
+				ON A.id = R.relId
+				LEFT JOIN board B
 			    ON A.boardId = B.id
 				WHERE 1 = 1
 				<if test="boardId != 0">
@@ -81,6 +84,7 @@ public interface ArticleDao {
 						</otherwise>
 					</choose>
 				</if>
+				GROUP BY A.id
 				ORDER BY A.id DESC
 				Limit #{limitFrom}, #{itemsInAPage}
 			</script>
@@ -93,11 +97,16 @@ public interface ArticleDao {
 	public int getLastInsertId();
 
 	@Select("""
-			SELECT A.*, M.nickname AS writerName
+			SELECT A.*
+				, M.nickname AS writerName
+				, IFNULL(SUM(R.point), 0) `point`
 				FROM article AS A
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
+				LEFT JOIN recommendPoint R
+				ON A.id = R.relId
 				WHERE A.id = #{id}
+				GROUP BY A.id
 			""")
 	public Article forPrintArticle(int id);
 
