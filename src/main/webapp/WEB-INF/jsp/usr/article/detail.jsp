@@ -119,6 +119,12 @@ function ShowReplies(rsReplies){
 				<li>
 					<div>작성자: ${ "${rsReplies[i].writerName}" }</div>
 					<div>내용: ${ "${rsReplies[i].body}" }</div>
+					
+					// 수정중
+					<c:if test="${rq.loginedMemberId == replies.memberId}">
+						<button class="btn btn-accent btn-sm"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></button>
+						<button class="btn btn-error btn-sm" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></button>
+					</c:if>
 				</li>
 			</ul>
 		`);
