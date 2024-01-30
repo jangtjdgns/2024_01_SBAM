@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.KoreaIT.demo.vo.Article;
-import com.KoreaIT.demo.vo.RecommendPoint;
 
 @Mapper
 public interface ArticleDao {
@@ -145,31 +144,4 @@ public interface ArticleDao {
 				WHERE id = #{id}
 			""")
 	public void increaseHitCnt(int id);
-
-	
-	@Insert("""
-			INSERT INTO recommendPoint
-				SET memberId = #{memberId}
-					, relTypeCode = #{relTypeCode}
-					, relId = #{relId}
-					, `point` = 1
-			""")
-	public void insertPoint(int memberId, int relId, String relTypeCode);
-
-	@Select("""
-			SELECT *
-				FROM recommendPoint
-				WHERE memberId = #{memberId}
-				AND relTypeCode = #{relTypeCode}
-				AND relId = #{relId}
-			""")
-	public RecommendPoint getRecommendPoint(int memberId, String relTypeCode, int relId);
-
-	@Delete("""
-			DELETE
-				WHERE memberId = #{memberId}
-				AND relTypeCode = #{relTypeCode}
-				AND relId = #{relId}
-			""")
-	public void deletePoint(int memberId, int relId, String relTypeCode);
 }

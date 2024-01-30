@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.KoreaIT.demo.dao.ArticleDao;
 import com.KoreaIT.demo.vo.Article;
-import com.KoreaIT.demo.vo.RecommendPoint;
 
 @Service
 public class ArticleService {
@@ -51,17 +50,5 @@ public class ArticleService {
 
 	public void increaseHitCnt(int id) {
 		articleDao.increaseHitCnt(id);
-	}
-
-	public void insertPoint(int memberId, int relId, String relTypeCode) {
-		articleDao.insertPoint(memberId, relId, relTypeCode);
-	}
-
-	public RecommendPoint getRecommendPoint(int memberId, String relTypeCode, int relId) {
-		return articleDao.getRecommendPoint(memberId, relTypeCode, relId);
-	}
-
-	public void deletePoint(int memberId, int relId, String relTypeCode) {
-		articleDao.deletePoint(memberId, relId, relTypeCode);
 	}
 }

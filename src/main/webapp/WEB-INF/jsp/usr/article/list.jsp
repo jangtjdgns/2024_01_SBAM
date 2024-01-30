@@ -5,7 +5,6 @@
 	<c:set var="pageTitle" value="${board.name }"/>
 
 <%@ include file="../common/header.jsp" %>
-
 	<section class="h-body py-5">
 		<!-- 검색 -->
 		<div class="breadcrumbs max-w-5xl mx-auto h-20 text-sm px-2 flex flex-row justify-between items-end">

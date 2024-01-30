@@ -13,8 +13,6 @@ import com.KoreaIT.demo.service.BoardService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Article;
 import com.KoreaIT.demo.vo.Board;
-import com.KoreaIT.demo.vo.RecommendPoint;
-import com.KoreaIT.demo.vo.ResultData;
 import com.KoreaIT.demo.vo.Rq;
 
 import jakarta.servlet.http.Cookie;
@@ -210,28 +208,5 @@ public class UsrArticleController {
 		articleService.deleteArticleById(id);
 		
 		return Util.jsReplace(Util.f("%d번 게시물이 삭제되었습니다.", id), "list");
-	}
-	
-	// 좋아요 추가
-	@RequestMapping("/usr/recommendPoint/insertPoint")
-	@ResponseBody
-	public String insertPoint(int id, String relTypeCode, int boardId) {
-		articleService.insertPoint(rq.getLoginedMemberId(), id, relTypeCode);
-		return Util.jsReplace("좋아요 성공", Util.f("../article/detail?id=%d&boardId=%d", id, boardId));
-	}
-	
-	// 좋아요 제거
-	@RequestMapping("/usr/recommendPoint/deletePoint")
-	@ResponseBody
-	public String deletePoint(int id, String relTypeCode, int boardId) {
-		articleService.deletePoint(rq.getLoginedMemberId(), id, relTypeCode);
-		return Util.jsReplace("좋아요 취소 성공", Util.f("../article/detail?id=%d&boardId=%d", id, boardId));
-	}
-	
-	@RequestMapping("/usr/recommendPoint/getRecommendPoint")
-	@ResponseBody
-	public ResultData<RecommendPoint> getRecommendPoint(String relTypeCode, int relId, int boardId) {
-		RecommendPoint recommendPoint = articleService.getRecommendPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		return ResultData.from("S-1", "좋아요 조회", recommendPoint);
 	}
 }

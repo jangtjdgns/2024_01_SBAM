@@ -6,29 +6,55 @@
 
 <%@ include file="../common/header.jsp" %>
 <script>
-	$(function(){
-		const getRecommendPoint = function(){
-			$.ajax({
-				url: "../recommendPoint/getRecommendPoint",
-				method: "get",
-				data : {
-					"relTypeCode": "article",
-					"relId": ${article.id}
-				},
-				dataType: "json",
-				success: function(data){
-					console.log("data");
-				},
-				error: function(xhr, status, error){
-					console.error("ERROR: " + status + "-" + )
-				}
-			})
+$(document).ready(function(){
+	getRecommendPoint();
+	
+	$('#recommendBtn').click(function(){
+		let recommendBtn = $('#recommendBtn').hasClass('btn-active');
+		
+		$.ajax({
+			url : "../recommendPoint/doRecommendPoint",
+			method : "get",
+			data : {
+				"relTypeCode" : "article",
+				"relId" : ${article.id },
+				"recommendBtn" : recommendBtn
+			},
+			dataType : "text",
+			success : function(data){
+			},
+			error : function(xhr, status, error){
+				console.error("ERROR : " + status + " - " + error);
+			}
+		})
+		
+		location.reload();
+	})
+})
+
+const getRecommendPoint = function(){
+	$.ajax({
+		url : "../recommendPoint/getRecommendPoint",
+		method : "get",
+		data : {
+			"relTypeCode" : "article",
+			"relId" : ${article.id }
+		},
+		dataType : "json",
+		success : function(data){
+			if (data.success) {
+				$('#recommendBtn').addClass('btn-active');
+			}
+		},
+		error : function(xhr, status, error){
+			console.error("ERROR : " + status + " - " + error);
 		}
-	});
+	})
+}
 </script>
 
 
-<section class="h-body py-5"">
+<section class="h-body py-5">
 	<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
 		<ul>
 			<li><a href="/">Home</a></li> 
@@ -59,18 +85,14 @@
 				</tr>
 				<tr>
 					<th>추천</th>
-					<td>${article.point }</td>
+					<td><span>${article.point }개</span></td>
 					<td>
 						<c:if test="${rq.loginedMemberId == 0}">
-							<span>${article.point }</span>
+							<span>${article.point }개</span>
 						</c:if>
+						
 						<c:if test="${rq.loginedMemberId != 0}">
-							<c:if test="${recommendPoint == null }">
-								<a class="btn" onclick="getRecommendPoint()" href="../recommendPoint/insertPoint?id=${article.id }&relTypeCode=article&boardId=${board.id}">좋아요👍</a>
-							</c:if>
-							<c:if test="${recommendPoint != null }">
-								<a class="btn btn-active" onclick="getRecommendPoint()" href="../recommendPoint/insertPoint?id=${article.id }&relTypeCode=article&boardId=${board.id}">좋아요👍</a>
-							</c:if>
+							<button id="recommendBtn" class="btn">좋아요👍</button>
 						</c:if>
 					</td>
 				</tr>
@@ -87,10 +109,9 @@
 	
 		<div>
 			<a href="list?boardId=${board.id }" class="btn">List</a>
-			<button class="btn" onclick="history.back()">Back</button>
 			<c:if test="${rq.loginedMemberId == article.memberId }">
-				<a href="modify?id=${article.id }" class="btn">수정</a>
-				<a href="doDelete?id=${article.id }" class="btn btn-error" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a>
+				<a href="modify?id=${article.id }" class="btn btn-accent btn-sm"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i></a>
+				<a href="doDelete?id=${article.id }" class="btn btn-error btn-sm" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></i></a>
 			</c:if>
 		</div>
 	</div>
