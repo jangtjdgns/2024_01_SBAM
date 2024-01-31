@@ -19,6 +19,8 @@ public class Rq {
 	
 	@Getter
 	private int loginedMemberId;
+	@Getter
+	private String loginedMemberNickname;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private HttpSession session;
@@ -35,6 +37,7 @@ public class Rq {
 		
 		if(session.getAttribute("loginedMemberId") != null) {
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			loginedMemberNickname = (String) session.getAttribute("loginedMemberNickname");
 		}
 		
 		this.loginedMemberId = loginedMemberId;
@@ -63,11 +66,13 @@ public class Rq {
 	// 세션 로그인
 	public void login(Member member) {
 		this.session.setAttribute("loginedMemberId", member.getId());
+		this.session.setAttribute("loginedMemberNickname", member.getNickname());
 	}
 	
 	// 세션 로그아웃
 	public void logout() {
 		this.session.removeAttribute("loginedMemberId");
+		this.session.removeAttribute("loginedMemberNickname");
 	}
 
 	// 객체를 완성하기 위한 메서드

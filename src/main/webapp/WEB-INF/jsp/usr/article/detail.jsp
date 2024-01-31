@@ -10,6 +10,7 @@ $(document).ready(function(){
 	getRecommendPoint();
 	getReply();
 	
+	// 조회수
 	$('#recommendBtn').click(function(){
 		let recommendBtn = $('#recommendBtn').hasClass('btn-active');
 		
@@ -28,7 +29,6 @@ $(document).ready(function(){
 				console.error("ERROR : " + status + " - " + error);
 			}
 		})
-		
 		location.reload();
 	})
 	
@@ -42,8 +42,9 @@ $(document).ready(function(){
 		}
 		
 		$.ajax({
-			url : "../reply/writeReply",
+			url : "../reply/doWrite",
 			method : "get",
+			async: true,
 			data : {
 				"relId" : ${article.id },
 				"relTypeCode" : "article",
@@ -51,15 +52,13 @@ $(document).ready(function(){
 			},
 			dataType : "text",
 			success : function(data){
-				if(data.success){
-					getReply();
-				}
+				getReply();
+				alert("작성되었습니다.")
 			},
 			error : function(xhr, status, error){
 				console.error("ERROR : " + status + " - " + error);
 			}
 		})
-		location.reload();
 	})
 })
 
@@ -86,10 +85,11 @@ const getRecommendPoint = function(){
 
 
 // 댓글 가져오기
-const getReply = function(){
+function getReply(){
 	$.ajax({
 		url : "../reply/getReply",
 		method : "get",
+		async: true,
 		data : {
 			"relTypeCode" : "article",
 			"relId" : ${article.id }
@@ -109,26 +109,95 @@ const getReply = function(){
 	})
 }
 
-// 댓글 표시 함수
+// 댓글 표시
 function ShowReplies(rsReplies){
 	let replies = $("#replies");
 	
 	for(let i = 0; i < rsReplies.length; i++){
 		replies.append(`
 			<ul class="pt-5">
-				<li>
-					<div>작성자: ${ "${rsReplies[i].writerName}" }</div>
-					<div>내용: ${ "${rsReplies[i].body}" }</div>
+				<li class="flex justify-center">
+					<input class="replyId" type="hidden" value=${ "${rsReplies[i].id}" } />
+					<div class="replyText w-4/5 flex flex-col">
+						<div>작성자: ${ "${rsReplies[i].writerName}" }</div>
+						<div class="replyContent">내용: ${ "${rsReplies[i].body}" }</div>
+						<textarea placeholder="Reply Here" class="replyBody textarea textarea-bordered textarea-md w-full hidden">${ "${rsReplies[i].body}" }</textarea>
+					</div>
+					<div class="reply-option-btn w-1/5 text-center flex flex-col">
 					
-					// 수정중
-					<c:if test="${rq.loginedMemberId == replies.memberId}">
-						<button class="btn btn-accent btn-sm"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></button>
-						<button class="btn btn-error btn-sm" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></button>
-					</c:if>
+					</div>
 				</li>
 			</ul>
 		`);
+		
+		if(${rq.loginedMemberId} == rsReplies[i].memberId){
+			$(".reply-option-btn").eq(i).append(`
+				<div>
+					<button class="btn btn-accent btn-sm" onclick="modifyReply(${ '${i}' })"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></button>
+					<button class="btn btn-error btn-sm" onclick="deleteReply(${ '${rsReplies[i].id}', '${i}' })"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></button>
+				</div>
+				<div>
+					<button class="doModifyBtn btn btn-sm hidden" onclick="">작성</button>
+				</div>
+			`);
+		}
 	}
+}
+
+//댓글 삭제
+function deleteReply(id){
+	if(!confirm("댓글을 삭제하시겠습니까?")){
+		return;
+	}
+	
+	$.ajax({
+		url : "../reply/doDelete",
+		method : "get",
+		async: true,
+		data : {
+			"id" : id
+		},
+		dataType : "text",
+		success : function(data){
+			getReply();
+			alert("삭제되었습니다.");
+		},
+		error : function(xhr, status, error){
+			console.error("ERROR : " + status + " - " + error);
+		}
+	})
+}
+
+// 댓글 수정을 위한 입력란 표시
+function modifyReply(replyNo){
+	$(".replyContent").eq(replyNo).toggleClass("hidden");
+	$(".replyBody").eq(replyNo).toggleClass("hidden");
+	$(".doModifyBtn").eq(replyNo).toggleClass("hidden");
+}
+
+// 댓글 수정
+function doModifyReply(id, replyNo){
+	if(!confirm("댓글을 수정하시겠습니까?")){
+		return;
+	}
+	
+	$.ajax({
+		url : "../reply/doModify",
+		method : "get",
+		async: true,
+		data : {
+			"id" : id,
+			"body" : $(".replyBody").eq(replyNo).val().trim();
+		},
+		dataType : "text",
+		success : function(data){
+			getReply();
+			alert("수정되었습니다.");
+		},
+		error : function(xhr, status, error){
+			console.error("ERROR : " + status + " - " + error);
+		}
+	})
 }
 
 </script>
@@ -182,7 +251,7 @@ function ShowReplies(rsReplies){
 				</tr>
 				<tr>
 					<th>내용</th>
-					<td>${article.body }</td>
+					<td>${article.getForPrintBody() }</td>
 				</tr>
 			</table>
 		</div>
@@ -198,12 +267,15 @@ function ShowReplies(rsReplies){
 	
 	
 	<!-- 댓글 -->
-	<div class="w-full max-w-5xl mx-auto pt-10 text-center">
-		
-		<textarea id="replyBody" placeholder="Reply Here" class="textarea textarea-bordered textarea-md w-4/5" ${rq.loginedMemberId == 0 ? "disabled" : "" } ></textarea>
-		<button id="writeBtn" class="btn" ${rq.loginedMemberId == 0 ? "disabled" : "" }>작성</button>
-		
-		<div id="replies" class="text-xs text-left w-4/5"></div>
+	<div class="w-full max-w-5xl mx-auto pt-10">
+		<div class="w-4/5 mx-auto">
+			<div>댓글</div>
+			<textarea id="replyBody" placeholder="Reply Here" class="textarea textarea-bordered textarea-md w-full" ${rq.loginedMemberId == 0 ? "disabled" : "" } ></textarea>
+			<div class="flex justify-end">
+				<button id="writeBtn" class="btn w-16 h-5 text-xs block" ${rq.loginedMemberId == 0 ? "disabled" : "" }>작성</button>
+			</div>
+		</div>
+		<div id="replies" class="text-xs mx-auto w-4/5 pt-6"></div>
 	</div>
 </section>
 	

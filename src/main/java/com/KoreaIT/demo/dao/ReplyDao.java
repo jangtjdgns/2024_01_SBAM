@@ -2,9 +2,11 @@ package com.KoreaIT.demo.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.KoreaIT.demo.vo.Reply;
 
@@ -31,5 +33,18 @@ public interface ReplyDao {
 				relId = #{relId},
 				`body` = #{body}
 			""")
-	public void writeReply(int memberId, int relId, String relTypeCode, String body);
+	public void doWrite(int memberId, int relId, String relTypeCode, String body);
+
+	@Delete("""
+			DELETE FROM reply
+				WHERE id = #{id};
+			""")
+	public void doDelete(int id);
+
+	@Update("""
+			UPDATE reply
+				`body` = #{body}
+				WHERE id = #{id}
+			""")
+	public void doModify(int id, String body);
 }

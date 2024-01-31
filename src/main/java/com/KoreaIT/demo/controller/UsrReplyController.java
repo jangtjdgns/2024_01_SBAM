@@ -35,12 +35,32 @@ public class UsrReplyController {
 	}
 	
 	// 댓글 작성
-	@RequestMapping("/usr/reply/writeReply")
+	@RequestMapping("/usr/reply/doWrite")
 	@ResponseBody
-	public String writeReply(int relId, String relTypeCode, String body) {
+	public String doWrite(int relId, String relTypeCode, String body) {
 		
-		replyService.writeReply(rq.getLoginedMemberId(), relId, relTypeCode, body);
+		replyService.doWrite(rq.getLoginedMemberId(), relId, relTypeCode, body);
 
 		return "댓글 작성 성공";
+	}
+	
+	// 댓글 삭제
+	@RequestMapping("/usr/reply/doDelete")
+	@ResponseBody
+	public String doDelete(int id) {
+		
+		replyService.doDelete(id);
+
+		return "댓글 삭제 성공";
+	}
+	
+	// 댓글 수정
+	@RequestMapping("/usr/reply/doModify")
+	@ResponseBody
+	public String doModify(int id, String body) {
+			
+		replyService.doModify(id, body);
+
+		return "댓글 수정 성공";
 	}
 }

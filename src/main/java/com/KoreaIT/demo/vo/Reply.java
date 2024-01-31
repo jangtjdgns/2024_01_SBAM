@@ -15,5 +15,10 @@ public class Reply {
 	private String relTypeCode;
 	private int relId;
 	private String body;
+	
 	private String writerName;
+	
+	public String getForPrintBody() {
+		return this.body.replaceAll("\n", "<br />");
+	}
 }
