@@ -1,6 +1,7 @@
 package com.KoreaIT.demo.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,14 +24,26 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(beforeActionInterceptor).addPathPatterns("/**").excludePathPatterns("/resource/**");
+		InterceptorRegistration ir;
+		ir = registry.addInterceptor(beforeActionInterceptor);
+		ir.addPathPatterns("/**");
+		ir.addPathPatterns("/favicon.ico");
+		ir.excludePathPatterns("/resource/**");
 		
-		registry.addInterceptor(needLoginInterceptor)
-				.addPathPatterns("/usr/article/doWrite").addPathPatterns("/usr/article/write")
-				.addPathPatterns("/usr/article/modify").addPathPatterns("/usr/article/doModify")
-				.addPathPatterns("/usr/article/doDelete").addPathPatterns("/usr/member/doLogout");
+		ir = registry.addInterceptor(needLoginInterceptor);
+		ir.addPathPatterns("/usr/article/write");
+		ir.addPathPatterns("/usr/article/doWrite");
+		ir.addPathPatterns("/usr/article/modify");
+		ir.addPathPatterns("/usr/article/doModify");
+		ir.addPathPatterns("/usr/article/doDelete");
+		ir.addPathPatterns("/usr/member/doLogout");
+		ir.addPathPatterns("/usr/recommendPoint/getRecommendPoint");
+		ir.addPathPatterns("/usr/recommendPoint/doRecommendPoint");
+		ir.addPathPatterns("/usr/reply/doWrite");
 
-		registry.addInterceptor(needLogoutInterceptor).addPathPatterns("/usr/member/login")
-				.addPathPatterns("/usr/member/doLogin").addPathPatterns("/usr/member/doJoin");
+		ir = registry.addInterceptor(needLogoutInterceptor);
+		ir.addPathPatterns("/usr/member/doJoin");
+		ir.addPathPatterns("/usr/member/login");
+		ir.addPathPatterns("/usr/member/doLogin");
 	}
 }

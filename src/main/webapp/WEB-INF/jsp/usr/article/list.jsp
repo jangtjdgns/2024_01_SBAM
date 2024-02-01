@@ -28,9 +28,6 @@
 						<option value="1">제목</option>
 						<option value="2">내용</option>
 						<option value="3">제목+내용</option>
-						<%-- <option value="1" ${searchType == 1 ? "selected" : '' }>제목</option>
-						<option value="2" ${searchType == 2 ? "selected" : '' }>내용</option>
-						<option value="3" ${searchType == 3 ? "selected" : '' }>제목+내용</option> --%>
 					</select>
 								
 					<input type="text" name="searchKeyword" placeholder="Search here" class="input input-bordered w-52 input-sm" value="${searchKeyword }" />

@@ -14,6 +14,12 @@ import com.KoreaIT.demo.vo.Reply;
 public interface ReplyDao {
 	
 	@Select("""
+			SELECT * FROM reply
+				WHERE id = #{id}
+			""")
+	public Reply getReplyById(int id);
+	
+	@Select("""
 			SELECT R.*, M.nickname writerName
 				FROM reply R
 				INNER JOIN `member` M
@@ -22,16 +28,16 @@ public interface ReplyDao {
 				AND R.relId = #{relId}
 				ORDER BY R.id DESC;
 			""")
-	public List<Reply> getReply(int relId, String relTypeCode);
+	public List<Reply> getReplies(int relId, String relTypeCode);
 
 	@Insert("""
 			INSERT INTO reply
-				SET regDate = NOW(),
-				updateDate = NOW(),
-				memberId = #{memberId},
-				relTypeCode = #{relTypeCode},
-				relId = #{relId},
-				`body` = #{body}
+				SET regDate = NOW()
+				, updateDate = NOW()
+				, memberId = #{memberId}
+				, relTypeCode = #{relTypeCode}
+				, relId = #{relId}
+				, `body` = #{body}
 			""")
 	public void doWrite(int memberId, int relId, String relTypeCode, String body);
 
@@ -43,7 +49,8 @@ public interface ReplyDao {
 
 	@Update("""
 			UPDATE reply
-				`body` = #{body}
+				SET updateDate = NOW()
+				, `body` = #{body}
 				WHERE id = #{id}
 			""")
 	public void doModify(int id, String body);

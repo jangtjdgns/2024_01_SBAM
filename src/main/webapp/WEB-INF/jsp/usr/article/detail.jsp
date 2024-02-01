@@ -44,7 +44,6 @@ $(document).ready(function(){
 		$.ajax({
 			url : "../reply/doWrite",
 			method : "get",
-			async: true,
 			data : {
 				"relId" : ${article.id },
 				"relTypeCode" : "article",
@@ -53,7 +52,8 @@ $(document).ready(function(){
 			dataType : "text",
 			success : function(data){
 				getReply();
-				alert("작성되었습니다.")
+				alert("댓글이 작성되었습니다.")
+				$("#replyBody").val("");
 			},
 			error : function(xhr, status, error){
 				console.error("ERROR : " + status + " - " + error);
@@ -89,7 +89,6 @@ function getReply(){
 	$.ajax({
 		url : "../reply/getReply",
 		method : "get",
-		async: true,
 		data : {
 			"relTypeCode" : "article",
 			"relId" : ${article.id }
@@ -114,14 +113,20 @@ function ShowReplies(rsReplies){
 	let replies = $("#replies");
 	
 	for(let i = 0; i < rsReplies.length; i++){
+		console.log(rsReplies[i]);
 		replies.append(`
 			<ul class="pt-5">
 				<li class="flex justify-center">
-					<input class="replyId" type="hidden" value=${ "${rsReplies[i].id}" } />
+					<input class="replyId border-t-2" type="hidden" value=\${rsReplies[i].id} />
 					<div class="replyText w-4/5 flex flex-col">
-						<div>작성자: ${ "${rsReplies[i].writerName}" }</div>
-						<div class="replyContent">내용: ${ "${rsReplies[i].body}" }</div>
-						<textarea placeholder="Reply Here" class="replyBody textarea textarea-bordered textarea-md w-full hidden">${ "${rsReplies[i].body}" }</textarea>
+						<div class="border-b">\${rsReplies[i].writerName} | \${rsReplies[i].regDate}</div>
+						<div class="replyContent">\${rsReplies[i].forPrintBody}</div>
+						<form action="../reply/doModify" method="post ">
+							<input type="hidden" name="id" value="\${rsReplies[i].id}" />
+							<input type="hidden" name="boardId" value="${article.boardId}" />
+							<textarea name="body" placeholder="Reply Here" class="replyBody textarea textarea-bordered textarea-md w-full hidden">\${rsReplies[i].body}</textarea>
+							<button class="replyModifyBtn btn btn-sm hidden" onclick="if(!confirm('댓글을 수정하시겠습니까?')) return false;">저장</button>
+						</form>
 					</div>
 					<div class="reply-option-btn w-1/5 text-center flex flex-col">
 					
@@ -132,72 +137,28 @@ function ShowReplies(rsReplies){
 		
 		if(${rq.loginedMemberId} == rsReplies[i].memberId){
 			$(".reply-option-btn").eq(i).append(`
-				<div>
-					<button class="btn btn-accent btn-sm" onclick="modifyReply(${ '${i}' })"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></button>
-					<button class="btn btn-error btn-sm" onclick="deleteReply(${ '${rsReplies[i].id}', '${i}' })"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></button>
-				</div>
-				<div>
-					<button class="doModifyBtn btn btn-sm hidden" onclick="">작성</button>
+				<div class="flex justify-between items-end">
+					<div>${reply.writerName }</div>
+					<div class="dropdown dropdown-end">
+						<button class="btn btn-circle btn-ghost btn-sm">
+					    	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+					    </button>
+				    	<ul tabindex="0" class="z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-24">
+				    		<li><button onclick="modifyReply(\${ i })">수정</button></li>
+				    		<li><a href="../reply/doDelete?id=\${rsReplies[i].id}&boardId=${article.boardId}" onclick="if(!confirm('댓글을 삭제하시겠습니까?')) return false;">삭제</a></li>
+				    	</ul>
+				    </div>
 				</div>
 			`);
 		}
 	}
 }
 
-//댓글 삭제
-function deleteReply(id){
-	if(!confirm("댓글을 삭제하시겠습니까?")){
-		return;
-	}
-	
-	$.ajax({
-		url : "../reply/doDelete",
-		method : "get",
-		async: true,
-		data : {
-			"id" : id
-		},
-		dataType : "text",
-		success : function(data){
-			getReply();
-			alert("삭제되었습니다.");
-		},
-		error : function(xhr, status, error){
-			console.error("ERROR : " + status + " - " + error);
-		}
-	})
-}
-
 // 댓글 수정을 위한 입력란 표시
-function modifyReply(replyNo){
-	$(".replyContent").eq(replyNo).toggleClass("hidden");
-	$(".replyBody").eq(replyNo).toggleClass("hidden");
-	$(".doModifyBtn").eq(replyNo).toggleClass("hidden");
-}
-
-// 댓글 수정
-function doModifyReply(id, replyNo){
-	if(!confirm("댓글을 수정하시겠습니까?")){
-		return;
-	}
-	
-	$.ajax({
-		url : "../reply/doModify",
-		method : "get",
-		async: true,
-		data : {
-			"id" : id,
-			"body" : $(".replyBody").eq(replyNo).val().trim();
-		},
-		dataType : "text",
-		success : function(data){
-			getReply();
-			alert("수정되었습니다.");
-		},
-		error : function(xhr, status, error){
-			console.error("ERROR : " + status + " - " + error);
-		}
-	})
+function modifyReply(replyId){
+	$(".replyContent").eq(replyId).toggleClass("hidden");
+	$(".replyBody").eq(replyId).toggleClass("hidden");
+	$(".replyModifyBtn").eq(replyId).toggleClass("hidden");
 }
 
 </script>

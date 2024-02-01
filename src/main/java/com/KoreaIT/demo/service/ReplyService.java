@@ -15,8 +15,12 @@ public class ReplyService {
 		this.replyDao = replyDao;
 	}
 	
-	public List<Reply> getReply(int relId, String relTypeCode) {
-		return replyDao.getReply(relId, relTypeCode);
+	public Reply getReplyById(int id) {
+		return replyDao.getReplyById(id);
+	}
+	
+	public List<Reply> getReplies(int relId, String relTypeCode) {
+		return replyDao.getReplies(relId, relTypeCode);
 	}
 
 	public void doWrite(int memberId, int relId, String relTypeCode, String body) {
@@ -30,4 +34,5 @@ public class ReplyService {
 	public void doModify(int id, String body) {
 		replyDao.doModify(id, body);
 	}
+
 }
