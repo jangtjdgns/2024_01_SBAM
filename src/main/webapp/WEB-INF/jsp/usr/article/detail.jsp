@@ -8,11 +8,12 @@
 <script>
 $(document).ready(function(){
 	getRecommendPoint();
-	getReply();
 	
-	// 조회수
+	// 좋아요 버튼 클릭
 	$('#recommendBtn').click(function(){
 		let recommendBtn = $('#recommendBtn').hasClass('btn-active');
+		
+		console.log(recommendBtn);
 		
 		$.ajax({
 			url : "../recommendPoint/doRecommendPoint",
@@ -29,36 +30,8 @@ $(document).ready(function(){
 				console.error("ERROR : " + status + " - " + error);
 			}
 		})
+		
 		location.reload();
-	})
-	
-	//댓글 작성
-	$('#writeBtn').click(function(){
-		const body = $("#replyBody").val().trim();
-		
-		if(body.length == 0){
-			alert("댓글을 입력해주세요.")
-			return $("#replyBody").focus();
-		}
-		
-		$.ajax({
-			url : "../reply/doWrite",
-			method : "get",
-			data : {
-				"relId" : ${article.id },
-				"relTypeCode" : "article",
-				"body" : body
-			},
-			dataType : "text",
-			success : function(data){
-				getReply();
-				alert("댓글이 작성되었습니다.")
-				$("#replyBody").val("");
-			},
-			error : function(xhr, status, error){
-				console.error("ERROR : " + status + " - " + error);
-			}
-		})
 	})
 })
 
@@ -73,7 +46,7 @@ const getRecommendPoint = function(){
 		},
 		dataType : "json",
 		success : function(data){
-			if (data.success) {
+			if(data.success) {
 				$('#recommendBtn').addClass('btn-active');
 			}
 		},
@@ -83,24 +56,63 @@ const getRecommendPoint = function(){
 	})
 }
 
+// 댓글 입력 검사
+const replyFormOnSubmit = function(form){
+	form.body.value = form.body.value.trim();
+	
+	if (form.body.value.length < 2) {
+		alert('2글자 이상 입력해주세요');
+		form.body.focus();
+		return;
+	}
+	
+	form.submit();
+}
 
-// 댓글 가져오기
-function getReply(){
+// 전역 변수
+let originalForm = null;		// 댓글 수정 전의 form 백업용
+let originalId = null;			// 댓글 수정 전의 댓글 id 백업용
+
+// 댓글 수정 form 생성 함수
+const replyModifyGetForm = function(replyId){
+	
+	if (originalForm != null) {				// 백업용 originalForm 변수가 null이 아닌경우, 어떠한 댓글이 백업 되있는 경우
+		replyModifyCancle(originalId);		// 수정 취소, 여기선 초기화 용도
+	}
+	
+	console.log(replyId);
+	
 	$.ajax({
-		url : "../reply/getReply",
+		url : "../reply/getReplyContent",
 		method : "get",
 		data : {
-			"relTypeCode" : "article",
-			"relId" : ${article.id }
+			"id" : replyId
 		},
 		dataType : "json",
 		success : function(data){
-			const results = data.data;
 			
-			if (data.success) {
-				$("#replies>ul").remove();
-				ShowReplies(results);
-			}
+			const reply = data.data;
+			
+			let replyContent = $('#' + replyId);
+			
+			originalId = replyId;
+			originalForm = replyContent.html();
+			
+			let addHtml = `
+				<form action="../reply/doModify" method="post" onsubmit="replyFormOnSubmit(this); return false;">
+					<input type="hidden" name="id" value="\${reply.id }" />
+					<input type="hidden" name="boardId" value="${board.id}" />
+					<div class="mt-4">
+						<textarea class="textarea textarea-bordered w-full resize-none" name="body" placeholder="Reply Here">\${reply.convertBrToN}</textarea>
+						<div class="flex justify-end">
+							<button onclick="replyModifyCancle(\${reply.id});" class="btn btn-outline btn-sm mr-2">취소</button>
+							<button class="btn btn-outline btn-sm">수정</button>
+						</div>
+					</div>
+				</form>
+			`;
+			
+			replyContent.empty().html(addHtml);
 		},
 		error : function(xhr, status, error){
 			console.error("ERROR : " + status + " - " + error);
@@ -108,135 +120,131 @@ function getReply(){
 	})
 }
 
-// 댓글 표시
-function ShowReplies(rsReplies){
-	let replies = $("#replies");
+// 수정 취소 함수
+const replyModifyCancle = function(replyId){
+	let replyContent = $('#' + replyId)
 	
-	for(let i = 0; i < rsReplies.length; i++){
-		console.log(rsReplies[i]);
-		replies.append(`
-			<ul class="pt-5">
-				<li class="flex justify-center">
-					<input class="replyId border-t-2" type="hidden" value=\${rsReplies[i].id} />
-					<div class="replyText w-4/5 flex flex-col">
-						<div class="border-b">\${rsReplies[i].writerName} | \${rsReplies[i].regDate}</div>
-						<div class="replyContent">\${rsReplies[i].forPrintBody}</div>
-						<form action="../reply/doModify" method="post ">
-							<input type="hidden" name="id" value="\${rsReplies[i].id}" />
-							<input type="hidden" name="boardId" value="${article.boardId}" />
-							<textarea name="body" placeholder="Reply Here" class="replyBody textarea textarea-bordered textarea-md w-full hidden">\${rsReplies[i].body}</textarea>
-							<button class="replyModifyBtn btn btn-sm hidden" onclick="if(!confirm('댓글을 수정하시겠습니까?')) return false;">저장</button>
-						</form>
-					</div>
-					<div class="reply-option-btn w-1/5 text-center flex flex-col">
-					
-					</div>
-				</li>
-			</ul>
-		`);
-		
-		if(${rq.loginedMemberId} == rsReplies[i].memberId){
-			$(".reply-option-btn").eq(i).append(`
-				<div class="flex justify-between items-end">
-					<div>${reply.writerName }</div>
-					<div class="dropdown dropdown-end">
-						<button class="btn btn-circle btn-ghost btn-sm">
-					    	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-					    </button>
-				    	<ul tabindex="0" class="z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-24">
-				    		<li><button onclick="modifyReply(\${ i })">수정</button></li>
-				    		<li><a href="../reply/doDelete?id=\${rsReplies[i].id}&boardId=${article.boardId}" onclick="if(!confirm('댓글을 삭제하시겠습니까?')) return false;">삭제</a></li>
-				    	</ul>
-				    </div>
-				</div>
-			`);
-		}
-	}
+	replyContent.html(originalForm);
+	
+	originalId = null;
+	originalForm = null;
 }
-
-// 댓글 수정을 위한 입력란 표시
-function modifyReply(replyId){
-	$(".replyContent").eq(replyId).toggleClass("hidden");
-	$(".replyBody").eq(replyId).toggleClass("hidden");
-	$(".replyModifyBtn").eq(replyId).toggleClass("hidden");
-}
-
 </script>
 
 
-<section class="h-body py-5">
-	<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
-		<ul>
-			<li><a href="/">Home</a></li> 
-			<li><a href="list">List</a></li>
-			<li><a href="list?boardId=${board.id }">${board.name }</a></li>
-			<li>${article.id }번</li>
-		</ul>
+<section class="h-body py-5 max-w-4xl mx-auto">
+	
+	<!-- 경로, 제목 -->
+	<div class="w-full">
+		<!-- 경로 -->
+		<div class="breadcrumbs text-sm h-16 px-2 flex flex-row justify-between items-end border-b-2 border-gray-200">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="list">List</a></li>
+				<li><a href="list?boardId=${board.id }">${board.name }</a></li>
+				<li>${article.id }번</li>
+			</ul>
+		</div>
+
+		<!-- 제목  -->
+		<div class="border-b-2 border-gray-200 px-1.5 py-2 flex items-center">
+
+			<div class="text-xs text-gray-700 w-1/5 flex flex-col justify-end items-start">
+				<span>${article.writerName }</span>
+				<span>${article.formatRegDate }</span>
+			</div>
+		
+			<div class="text-2xl font-bold w-3/5 text-center">
+				<span>${article.title }</span>
+			</div>
+			<div class="w-1/5">
+				<c:if test="${rq.loginedMemberId == article.memberId }">
+					<div class="dropdown dropdown-end flex align-start justify-end">
+						<div tabindex="0" role="button" class="btn btn-xs btn-ghost rounded-btn">
+							<i class="fa-solid fa-gear text-gray-700"></i>
+						</div>
+						<ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-22 mt-7">
+							<li>
+								<a href="modify?id=${article.id }" class="btn btn-sm btn-ghost border-green-200">
+									<i class="fa-regular fa-pen-to-square"></i>
+								</a>
+							</li>
+							<li class="pt-1.5">
+								<a href="doDelete?id=${article.id }" class="btn btn-sm btn-ghost border-red-200" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">
+									<i class="fa-regular fa-trash-can"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</c:if>
+				
+				<div class="text-xs text-gray-700 flex justify-end items-end">
+					<span><i class="fa-regular fa-eye"></i> ${article.hitCnt }</span>
+					<span class="px-1.5"><i class="fa-regular fa-thumbs-up"></i> ${article.point }</span>
+					<span><i class="fa-regular fa-comment-dots"></i> ${article.replyCnt }</span>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="w-full max-w-5xl mx-auto">
-		<div>
-			<table class="table">
-				<tr>
-					<th>번호</th>
-					<td>${article.id }</td>
-				</tr>
-				<tr>
-					<th>작성일</th>
-					<td>${article.regDate.substring(2, 16) }</td>
-				</tr>
-				<tr>
-					<th>조회수</th>
-					<td>${article.hitCnt }</td>
-				</tr>
-				<tr>
-					<th>작성자</th>
-					<td>${article.writerName }</td>
-				</tr>
-				<tr>
-					<th>추천</th>
-					<td><span>${article.point }개</span></td>
-					<td>
-						<c:if test="${rq.loginedMemberId == 0}">
-							<span>${article.point }개</span>
-						</c:if>
-						
-						<c:if test="${rq.loginedMemberId != 0}">
-							<button id="recommendBtn" class="btn">좋아요👍</button>
-						</c:if>
-					</td>
-				</tr>
-				<tr>
-					<th>제목</th>
-					<td>${article.title }</td>
-				</tr>
-				<tr>
-					<th>내용</th>
-					<td>${article.getForPrintBody() }</td>
-				</tr>
-			</table>
+	<!-- 글, 좋아요 -->
+	<div class="w-full p-4 border-b-2 border-gray-200">
+		<div style="min-height: 20vh;">
+			${article.convertNToBr }
 		</div>
-	
-		<div>
-			<a href="list?boardId=${board.id }" class="btn">List</a>
-			<c:if test="${rq.loginedMemberId == article.memberId }">
-				<a href="modify?id=${article.id }" class="btn btn-accent btn-sm"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i></a>
-				<a href="doDelete?id=${article.id }" class="btn btn-error btn-sm" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></i></a>
-			</c:if>
+		<div class="flex justify-center pt-4">
+			<button id="recommendBtn" class="btn" ${rq.loginedMemberId != 0 ? '' : 'disabled'}>좋아요👍 ${article.point }</button>
 		</div>
 	</div>
 	
 	
 	<!-- 댓글 -->
-	<div class="w-full max-w-5xl mx-auto pt-10">
-		<div class="w-4/5 mx-auto">
-			<div>댓글</div>
-			<textarea id="replyBody" placeholder="Reply Here" class="textarea textarea-bordered textarea-md w-full" ${rq.loginedMemberId == 0 ? "disabled" : "" } ></textarea>
-			<div class="flex justify-end">
-				<button id="writeBtn" class="btn w-16 h-5 text-xs block" ${rq.loginedMemberId == 0 ? "disabled" : "" }>작성</button>
-			</div>
+	<div class="w-full pt-4">
+		<div class="border-b-2 pb-4">
+			<div>댓글 (${article.replyCnt })</div>
+			
+			<!-- 댓글 입력 form -->
+			<form action="../reply/doWrite" method="post" onsubmit="replyFormOnSubmit(this); return false;">
+				<input type="hidden" name="relId" value="${article.id }"/>
+				<input type="hidden" name="relTypeCode" value="article"/>
+				<input type="hidden" name="boardId" value="${article.boardId }" />
+				<textarea name="body" placeholder="Reply Here" class="textarea textarea-bordered textarea-md w-full resize-none" ${rq.loginedMemberId == 0 ? "disabled" : "" } ></textarea>
+				<div class="flex justify-end">
+					<button class="btn btn-md w-20 text-sm block" ${rq.loginedMemberId == 0 ? "disabled" : "" }>작성</button>
+				</div>
+			</form>
 		</div>
-		<div id="replies" class="text-xs mx-auto w-4/5 pt-6"></div>
+		
+		<div id="replies" class="text-sm px-1.5">
+			<c:forEach var="reply" items="${replies }">
+				<div class="flex justify-between border-b py-4" style="min-height: 144px;">
+					<div class="avatar px-2">
+						<div class="w-10 h-10 rounded-full">
+							<img src="http://placehold.it/50x50" />
+						</div>
+					</div>
+					<div class="w-full px-2">
+						<div>
+							<span class="font-bold">${reply.writerName }</span>
+							<span>| ${reply.formatRegDate }</span>
+						</div>
+						<div id="${reply.id }" class="p-1.5">${reply.convertNToBr }</div>			
+					</div>
+					
+					<c:if test="${rq.loginedMemberId == reply.memberId }">
+						<div class="dropdown dropdown-end">
+							<button class="btn btn-circle btn-ghost btn-sm">
+						    	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+						    </button>
+					    	<ul tabindex="0" class="z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-24">
+					    		<li><button onclick="replyModifyGetForm(${reply.id});">수정</button></li>
+					    		<li><a href="../reply/doDelete?id=${reply.id }&boardId=${article.boardId}" onclick="if(!confirm('정말 삭제하시겠습니까?')) return false;">삭제</a></li>
+					    	</ul>
+					    </div>
+					</c:if>
+				</div>
+			</c:forEach>
+		</div>
 	</div>
 </section>
 	

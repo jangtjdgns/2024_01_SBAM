@@ -28,8 +28,8 @@
 </script>
 
 <!-- required -->
-<section class="h-body py-40">
-	<div class="card shrink-0 w-full mx-auto max-w-sm shadow-2xl bg-base-100 scale-110">
+<section class="h-body py-40" style="background-image: url(https://cdn.pixabay.com/photo/2019/04/02/17/55/haweswater-reservoir-4098338_1280.jpg); background-size:cover; background-position: center;">
+	<div class="card shrink-0 w-full mx-auto max-w-sm shadow-2xl bg-base-100 opacity-85">
 		<form class="card-body" action="doLogin" method="post" onsubmit="loginFormOnSubmit(this); return false;">
 			<div class="form-control">
 				<label class="label"> <span class="label-text">User</span></label>

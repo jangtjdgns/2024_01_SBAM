@@ -25,7 +25,7 @@ public class UsrRecommendPointController {
 	public ResultData<RecommendPoint> getRecommendPoint(int relId, String relTypeCode) {
 		RecommendPoint recommendPoint = recommendSerivce.getRecommendPoint(rq.getLoginedMemberId(), relId, relTypeCode);
 		
-		if(recommendPoint == null) {
+		if (recommendPoint == null) {
 			return ResultData.from("F-1", "좋아요 기록 없음");
 		}
 		

@@ -5,9 +5,9 @@
 	<c:set var="pageTitle" value="${board.name }"/>
 
 <%@ include file="../common/header.jsp" %>
-	<section class="h-body py-5">
+	<section class="h-body py-5 max-w-4xl mx-auto">
 		<!-- 검색 -->
-		<div class="breadcrumbs max-w-5xl mx-auto h-20 text-sm px-2 flex flex-row justify-between items-end">
+		<div class="breadcrumbs h-16 text-sm px-2 flex flex-row justify-between items-end">
 			<ul>
 				<li><a href="/">Home</a></li> 
 				<li><a href="list">List</a></li>
@@ -43,7 +43,7 @@
 		</div>
 		
 		<!-- 게시물 -->
-		<div class="max-w-5xl mx-auto">
+		<div>
 			<table class="table">
 				<thead class="bg-gray-100 text-center">
 					<tr>
@@ -66,7 +66,13 @@
 					<c:forEach var="article" items="${articles }">
 						<tr>
 							<td>${article.id }</td>
-							<td class="hover:underline"><a href="detail?boardId=${board.id}&id=${article.id }">${article.title }</a></td>
+							<td class="hover:underline">
+								<a href="detail?boardId=${board.id}&id=${article.id }">${article.title }
+								<c:if test="${article.replyCnt != 0 }">
+									<span class="font-bold">(${article.replyCnt })</span>
+								</c:if>
+								</a>
+							</td>
 							<td>${article.writerName }</td>
 							<td class="text-center">${article.regDate.substring(2, 16) }</td>
 							<td>${article.point }</td>
@@ -78,7 +84,7 @@
 		</div>
 		
 		<!-- 페이징버튼 -->
-		<div class="pt-7 max-w-5xl mx-auto flex">
+		<div class="pt-7 flex">
 		
 			<c:set var="baseUri" value="?searchType=${searchType}&searchKeyword=${searchKeyword }&itemsInAPage=${itemsInAPage }&boardId=${board.id }"></c:set>
 			

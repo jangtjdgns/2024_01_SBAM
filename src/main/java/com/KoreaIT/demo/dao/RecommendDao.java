@@ -10,6 +10,15 @@ import com.KoreaIT.demo.vo.RecommendPoint;
 @Mapper
 public interface RecommendDao {
 
+	@Select("""
+			SELECT *
+				FROM recommendPoint
+				WHERE memberId = #{memberId}
+				AND relTypeCode = #{relTypeCode}
+				AND relId = #{relId}
+			""")
+	public RecommendPoint getRecommendPoint(int memberId, int relId, String relTypeCode);
+	
 	@Insert("""
 			INSERT INTO recommendPoint
 				SET memberId = #{memberId}
@@ -19,14 +28,6 @@ public interface RecommendDao {
 			""")
 	public void insertPoint(int memberId, int relId, String relTypeCode);
 	
-	@Select("""
-			SELECT *
-				FROM recommendPoint
-				WHERE memberId = #{memberId}
-				AND relTypeCode = #{relTypeCode}
-				AND relId = #{relId}
-			""")
-	public RecommendPoint getRecommendPoint(int memberId, int relId, String relTypeCode);
 
 	@Delete("""
 			DELETE FROM recommendPoint
@@ -36,3 +37,4 @@ public interface RecommendDao {
 			""")
 	public void deletePoint(int memberId, int relId, String relTypeCode);
 }
+

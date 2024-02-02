@@ -22,27 +22,28 @@ public class UsrReplyController {
 		this.rq = rq;
 	}
 	
-	// 댓글 조회
-	@RequestMapping("/usr/reply/getReply")
-	@ResponseBody
-	public ResultData<List<Reply>> getReplies(int relId, String relTypeCode) {
-		List<Reply> replies = replyService.getReplies(relId, relTypeCode);
+	// 해당 댓글 정보 가져오기
+	@RequestMapping("/usr/reply/getReplyContent")
+ 	@ResponseBody
+ 	public ResultData<Reply> getReplyContent(int id) {
 		
-		if(replies == null) {
-			return ResultData.from("F-1", "댓글 기록 없음");
-		}
+		Reply reply = replyService.getReplyById(id);
 		
-		return ResultData.from("S-1", "댓글 조회 성공", replies);
+		System.out.println(reply);
+		
+		return ResultData.from("S-1", "댓글 조회 성공", reply);
+	
 	}
+	 
 	
 	// 댓글 작성
 	@RequestMapping("/usr/reply/doWrite")
 	@ResponseBody
-	public String doWrite(int relId, String relTypeCode, String body) {
+	public String doWrite(int relId, String relTypeCode, String body, int boardId) {
 		
 		replyService.doWrite(rq.getLoginedMemberId(), relId, relTypeCode, body);
-
-		return "댓글 작성 성공";
+		
+		return Util.f("<script>alert('댓글이 작성되었습니다.'); location.replace('../article/detail?id=%d&boardId=%d')</script>", relId, boardId);
 	}
 	
 	// 댓글 삭제

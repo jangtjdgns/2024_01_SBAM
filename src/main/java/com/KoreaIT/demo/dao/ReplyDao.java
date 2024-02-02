@@ -14,8 +14,11 @@ import com.KoreaIT.demo.vo.Reply;
 public interface ReplyDao {
 	
 	@Select("""
-			SELECT * FROM reply
-				WHERE id = #{id}
+			SELECT R.*, M.nickname writerName
+				FROM reply R
+				INNER JOIN `member` M
+				ON R.memberId = M.id
+				WHERE R.id = #{id}
 			""")
 	public Reply getReplyById(int id);
 	

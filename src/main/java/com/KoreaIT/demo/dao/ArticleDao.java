@@ -57,6 +57,7 @@ public interface ArticleDao {
 			<script>
 			SELECT A.*, M.nickname writerName
 				, IFNULL(SUM(R.point), 0) `point`
+				, (SELECT COUNT(*) FROM reply WHERE relId = A.id) replyCnt
 				FROM article A
 				INNER JOIN `member` M
 			    ON A.memberId = M.id
@@ -100,6 +101,7 @@ public interface ArticleDao {
 			SELECT A.*
 				, M.nickname AS writerName
 				, IFNULL(SUM(R.point), 0) `point`
+				, (SELECT COUNT(*) FROM reply WHERE relId = A.id) replyCnt
 				FROM article AS A
 				INNER JOIN `member` AS M
 				ON A.memberId = M.id
