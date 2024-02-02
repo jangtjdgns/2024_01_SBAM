@@ -3,26 +3,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="pageTitle" value="WRITE" />
-
 <%@ include file="../common/header.jsp"%>
 
 <script>
-	const writeFormOnSubmit = function(form){
+	const writeFormOnSubmit = function(form) {
 		form.title.value = form.title.value.trim();
 		form.body.value = form.body.value.trim();
-		
+
 		if (form.title.value.length == 0) {
 			alert('제목을 입력해주세요');
 			form.title.focus();
 			return;
 		}
-		
+
 		if (form.body.value.length == 0) {
 			alert('내용을 입력해주세요');
 			form.body.focus();
 			return;
 		}
-		
+
 		form.submit();
 	}
 </script>
@@ -35,8 +34,88 @@
 			<li><a href="write">write</a></li>
 		</ul>
 	</div>
+    
+	<!-- 토스트 UI -->
+	<div id="editor"></div>
+	
+	<button id="btn-getHtml">내용 가져오기</button>
 
-	<div class="w-full max-w-5xl mx-auto">
+	<button id="btn-setHtml">내용 넣기</button>
+	
+	<script>
+		const Editor = toastui.Editor;
+		
+		window.dataStorage = {
+		    _storage: new WeakMap(),
+		    put: function (element, key, obj) {
+		        if (!this._storage.has(element)) {
+		            this._storage.set(element, new Map());
+		        }
+		        this._storage.get(element).set(key, obj);
+		    },
+		    get: function (element, key) {
+		        return this._storage.get(element).get(key);
+		    },
+		    has: function (element, key) {
+		        return this._storage.has(element) && this._storage.get(element).has(key);
+		    },
+		    remove: function (element, key) {
+		        var ret = this._storage.get(element).delete(key);
+		        if (!this._storage.get(element).size === 0) {
+		            this._storage.delete(element);
+		        }
+		        return ret;
+		    }
+		}
+		
+		function Editor__init(){
+		  const editorEl = document.querySelector('#editor');
+		  const editor = new Editor({
+		    el: editorEl,
+		    height: '500px',
+		    initialEditType: 'markdown',
+		    previewStyle: 'tab'
+		  });
+		  
+		  dataStorage.put(editorEl, 'editor', editor);
+		}
+		
+		function Viewer__init(){
+		  const editorEl = document.querySelector('#viewer');
+		  const editor = new Editor({
+		    el: editorEl,
+		    viewer:true,
+		    initialValue:'#zzzzzzzzz'
+		  });
+		  
+		  dataStorage.put(editorEl, 'editor', editor);
+		}
+		
+		const btnGetHtmlEl = document.querySelector('#btn-getHtml');
+		
+		btnGetHtmlEl.addEventListener('click', () => {
+		  const editorEl = document.querySelector('#editor');
+		  const editor = dataStorage.get(editorEl, 'editor');
+		  
+		  alert(editor.getHTML());
+		  alert(editor.getMarkdown());
+		})
+		
+		const btnSetHtmlEl = document.querySelector('#btn-setHtml');
+		
+		btnSetHtmlEl.addEventListener('click', () => {
+		  const editorEl = document.querySelector('#editor');
+		  const editor = dataStorage.get(editorEl, 'editor');
+		  
+		  editor.setHTML('<h2>zasd</h2>');
+		})
+		
+		// editor.getMarkdown();
+		Editor__init();
+		Viewer__init();
+	</script>
+	
+	<%-- <div class="w-full max-w-5xl mx-auto">
 		<form action="doWrite" method="post" onsubmit="writeFormOnSubmit(this); return false;">
 		<input type="hidden" name="id" value="${article.id }" />
 			<div>
@@ -44,18 +123,6 @@
 					<tr>
 						<th>게시판</th>
 						<td>
-							<!-- <div class="flex">
-								라디오 사용
-								<label class="flex items-center">
-									<input type="radio" name="boardId" class="radio" value="1" checked />
-									공지사항
-								</label>
-								<div class="w-20"></div>
-								<label class="flex items-center">
-									<input type="radio" name="boardId" class="radio" value="2" />
-									자유
-								</label>
-							</div> -->
 							<select class="select select-bordered w-36 min-h-0 h-9" name="boardId">
 								<!-- 공지는 어드민만 가능하도록 변경예정, 임시로 memberId가 1인경우에만 가능 -->
 								<c:if test="${rq.loginedMemberId == 1 }"><option value="1" selected>공지사항</option></c:if>
@@ -79,7 +146,7 @@
 				<button type="button" class="btn" onclick="history.back()">Back</button>
 			</div>
 		</form>
-	</div>
+	</div> --%>
 </section>
 
 <%@ include file="../common/footer.jsp"%>
