@@ -1,7 +1,5 @@
 package com.KoreaIT.demo.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,8 +26,6 @@ public class UsrReplyController {
  	public ResultData<Reply> getReplyContent(int id) {
 		
 		Reply reply = replyService.getReplyById(id);
-		
-		System.out.println(reply);
 		
 		return ResultData.from("S-1", "댓글 조회 성공", reply);
 	
@@ -70,6 +66,10 @@ public class UsrReplyController {
 	@RequestMapping("/usr/reply/doModify")
 	@ResponseBody
 	public String doModify(int id, String body, int boardId) {
+		
+		if(Util.empty(body)) {
+			return Util.jsHistoryBack("내용을 입력해주세요.");
+		}
 		
 		Reply reply = replyService.getReplyById(id);
 		

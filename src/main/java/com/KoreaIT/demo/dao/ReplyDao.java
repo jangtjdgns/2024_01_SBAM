@@ -36,11 +36,11 @@ public interface ReplyDao {
 	@Insert("""
 			INSERT INTO reply
 				SET regDate = NOW()
-				, updateDate = NOW()
-				, memberId = #{memberId}
-				, relTypeCode = #{relTypeCode}
-				, relId = #{relId}
-				, `body` = #{body}
+					, updateDate = NOW()
+					, memberId = #{memberId}
+					, relTypeCode = #{relTypeCode}
+					, relId = #{relId}
+					, `body` = #{body}
 			""")
 	public void doWrite(int memberId, int relId, String relTypeCode, String body);
 
@@ -53,7 +53,7 @@ public interface ReplyDao {
 	@Update("""
 			UPDATE reply
 				SET updateDate = NOW()
-				, `body` = #{body}
+					, `body` = #{body}
 				WHERE id = #{id}
 			""")
 	public void doModify(int id, String body);
