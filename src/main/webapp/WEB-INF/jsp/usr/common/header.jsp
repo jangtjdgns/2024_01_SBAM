@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${pageTitle }</title>
+	<link rel="shuirtcut icon" type="icon" sizes="16x16" href="/resource/images/favicon.ico">
 	<%@ include file="../common/head.jsp"%>
 </head>
 <body>
