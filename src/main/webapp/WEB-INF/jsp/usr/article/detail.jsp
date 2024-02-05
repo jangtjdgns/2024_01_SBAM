@@ -5,8 +5,39 @@
 	<c:set var="pageTitle" value="DETAIL"/>
 
 <%@ include file="../common/header.jsp" %>
+<!-- dompurify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.0/purify.min.js"></script>
+
+<!-- 토스트 UI 에디터 코어 -->
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+<!-- 토스트 UI 에디터 플러그인, 컬러피커 -->
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css" />
+<script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css" />
+<script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+
 <script>
+	function ToastEditorView__init() {
+	    const $initialValueEl = $("#body");
+	    const initialValue = $initialValueEl.val();
+
+	    var viewer = new toastui.Editor.factory({
+	      	el: document.querySelector("#viewer"),
+	      	initialValue: initialValue,
+	      	viewer:true,
+	      	plugins: [
+	    	  toastui.Editor.plugin.colorSyntax,
+	    	]
+	    });
+		
+	    $("#viewer").data('viewer', viewer);
+	}
+	
+
 $(document).ready(function(){
+	ToastEditorView__init();
 	getRecommendPoint();
 	
 	// 좋아요 버튼 클릭
@@ -189,9 +220,11 @@ const replyModifyCancle = function(replyId){
 
 	<!-- 글, 좋아요 -->
 	<div class="w-full p-4 border-b-2 border-gray-200">
-		<div style="min-height: 20vh;">
+		<textarea id="body" class="hidden">${article.body}</textarea>
+		<div id="viewer"></div>
+		<%-- <div style="min-height: 20vh;">
 			${article.convertNToBr }
-		</div>
+		</div> --%>
 		<div class="flex justify-center pt-4">
 			<button id="recommendBtn" class="btn" ${rq.loginedMemberId != 0 ? '' : 'disabled'}>좋아요👍 ${article.point }</button>
 		</div>

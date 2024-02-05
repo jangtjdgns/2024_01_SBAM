@@ -181,7 +181,7 @@ public class UsrArticleController {
 	// doModify, 수정
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
+	public String doModify(int id, int boardId, String title, String body) {
 		
 		Article article = articleService.getArticleById(id);
 
@@ -195,7 +195,7 @@ public class UsrArticleController {
 
 		articleService.modifyArticle(id, title, body);
 
-		return Util.jsReplace(Util.f("%d번 게시물이 수정되었습니다.", id), Util.f("detail?boardId=0&id=%s", id));
+		return Util.jsReplace(Util.f("%d번 게시물이 수정되었습니다.", id), Util.f("detail?boardId=%d&id=%d", boardId, id));
 	}
 
 	// delete, 삭제

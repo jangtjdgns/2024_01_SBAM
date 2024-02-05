@@ -6,63 +6,42 @@
 
 <%@ include file="../common/header.jsp"%>
 
-<script>
-	const modifyFormOnSubmit = function(form){
-		form.title.value = form.title.value.trim();
-		form.body.value = form.body.value.trim();
-		
-		if (form.title.value.length == 0) {
-			alert('제목을 입력해주세요');
-			form.title.focus();
-			return;
-		}
-		
-		if (form.body.value.length == 0) {
-			alert('내용을 입력해주세요');
-			form.body.focus();
-			return;
-		}
-		
-		form.submit();
-	}
-</script>
+<%@ include file="../common/toastUi.jsp"%>
 
-<section class="h-body py-5">
-	<div class="breadcrumbs max-w-5xl mx-auto text-sm h-20 px-2 flex flex-row justify-between items-end">
+<section class="h-body py-5 max-w-4xl mx-auto">
+	<div class="breadcrumbs text-sm h-16 px-2 flex flex-row justify-between items-end">
 		<ul>
 			<li><a href="/">Home</a></li> 
 			<li><a href="list">List</a></li>
-			<li><a href="modify?id=${article.id }">Modify</a></li>
-			<li><a href="detail?id=${article.id }">${article.id }번</a></li>
+			<li>Modify</li>
 		</ul>
 	</div>
 
-	<div class="w-full max-w-5xl mx-auto">
-		<form action="doModify" method="post" onsubmit="modifyFormOnSubmit(this); return false;">
-		<input type="hidden" name="id" value="${article.id }" />
-			<div>
-				<table class="table">
-					<tr>
-						<th>번호</th>
-						<td>${article.id }</td>
-					</tr>
-					<tr>
-						<th>제목</th>
-						<td><input name="title" type="text" placeholder="Type here" value="${article.title }" class="input input-bordered w-full max-w-xs" /></td>
-					</tr>
-					<tr>
-						<th>내용</th>
-						<td><textarea name="body" placeholder="내용을 입력하세요." class="textarea textarea-bordered textarea-md w-full max-w-xs">${article.body }</textarea></td>
-					</tr>
-				</table>
+	<form action="doModify" method="post" onsubmit="writeFormOnSubmit(this); return false;">
+		<input name="id" type="hidden" value="${article.id }" />
+		<textarea name="body" class="hidden">${article.body }</textarea>
+		<div>
+			<input name="title" class="input input-bordered input-md w-2/5" placeholder="제목을 입력해주세요" type="text" value="${article.title }">
+			<select name="boardId" class="select select-bordered select-md">
+				<c:if test="${rq.loginedMemberId == 1 }">
+					<option value="1" selected>공지사항</option>
+				</c:if>
+				<option value="2" ${article.boardId == 2 ? 'selected' : ''}>자유게시판</option>
+			</select>
+		</div>
+		<div>
+			<span>내용</span>
+			<div id="editor" class="toast-ui-editor">
+				<script type="text/x-template">
+					
+				</script>
 			</div>
-	
-			<div>
-				<button class="btn btn-priamry">확인</button>
-				<button type="button" class="btn" onclick="history.back()">Back</button>
-			</div>
-		</form>
-	</div>
+		</div>
+		<div>
+			<button class="btn btn-priamry">작성</button>
+			<button type="button" class="btn" onclick="history.back()">Back</button>
+		</div>
+	</form>
 </section>
 
 <%@ include file="../common/footer.jsp"%>
