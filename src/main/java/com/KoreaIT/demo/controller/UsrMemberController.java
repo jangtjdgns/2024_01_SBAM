@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.demo.service.MemberService;
 import com.KoreaIT.demo.util.Util;
 import com.KoreaIT.demo.vo.Member;
+import com.KoreaIT.demo.vo.ResultData;
 import com.KoreaIT.demo.vo.Rq;
 
 @Controller
@@ -18,6 +19,29 @@ public class UsrMemberController {
 	public UsrMemberController(MemberService memberService, Rq rq) {
 		this.memberService = memberService;
 		this.rq = rq;
+	}
+	
+	@RequestMapping("/usr/member/join")
+	public String join() {
+		
+		return "usr/member/join";
+	}
+	
+	@RequestMapping("/usr/member/loginIdDupChk")
+	@ResponseBody
+	public ResultData loginIddupCheck(String loginId) {
+		
+		if(Util.empty(loginId)) {
+			return  ResultData.from("F-1", "아이디를 입력해주세요.");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if(member != null) {
+			return ResultData.from("F-2", Util.f("%s 은(는) 이미 존재하는 아이디입니다.", loginId));
+		}
+		
+		return ResultData.from("S-1", Util.f("%s 은(는) 사용가능한 아이디입니다.", loginId));
 	}
 	
 	@RequestMapping("/usr/member/doJoin")

@@ -39,7 +39,8 @@
 	    </button>
 	    
 	    <c:if test="${rq.loginedMemberId == 0}">
-	    	<a href="../member/login" class="btn btn-ghost">LOGIN</a>
+	    	<a href="../member/login" class="btn btn-ghost btn-xm">LOGIN</a>
+	    	<a href="../member/join" class="btn btn-ghost btn-xm">JOIN</a>
 	    </c:if>
 	    
 	    <c:if test="${rq.loginedMemberId != 0 }">
